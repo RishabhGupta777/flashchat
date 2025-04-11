@@ -1,0 +1,102 @@
+import 'package:flashchat/Tmart/colors.dart';
+import 'package:flashchat/Tmart/screens/all_brand_screen.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/cart_counter_icon.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/category_tab.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/t_search_container.dart';
+import 'package:flashchat/Tmart/widgets/product_card/grid_layout.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/brand_card.dart';
+import 'package:flutter/material.dart';
+
+class Store extends StatefulWidget {
+  const Store({super.key});
+
+  @override
+  State<Store> createState() => _StoreState();
+}
+
+class _StoreState extends State<Store> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        appBar:AppBar(
+          title: const Text('Store',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: TColors.primary),),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: TCartCounterIcon(iconColor: TColors.primary,),
+            ),
+          ],
+        ),
+        body:  NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverAppBar(
+                  floating: true,
+                  pinned: true,  //<--isi se Tabbar pin hua h
+                  snap: true,
+                  expandedHeight: 340.0,
+                  forceElevated: innerBoxIsScrolled,
+                  backgroundColor: Colors.white,
+                  flexibleSpace:ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      const TSearchContainer(enableBorderColor: Colors.black12,focusBorderColor: Colors.black12,),
+                      const SizedBox(height: 10,),
+                       TSectionHeading(title:"Featured Brands",onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AllBrandScreen()));
+                      }, ),
+                      TGridLayout(
+                        mainAxisExtent: 76,
+                        itemCount: 4,
+                        itemBuilder:    (_, int index) {
+                          return  const TBrandCard(showBorder: true,);
+                        },
+                      )
+
+                    ],
+                  ),
+                  bottom:  PreferredSize(
+                    preferredSize: const Size.fromHeight(kToolbarHeight),
+                    child: Container(
+                      color: Colors.white, // Change this to your desired background color
+                      child: const TabBar(
+                        isScrollable: true,
+                        indicatorColor: TColors.primary,
+                        unselectedLabelColor: Colors.grey,
+                        labelColor: TColors.primary,
+                        tabs: [
+                          Tab(child: Text("Sports")),
+                          Tab(child: Text("Furniture")),
+                          Tab(child: Text("Electronics")),
+                          Tab(child: Text("Clothes")),
+                          Tab(child: Text("Cosmetics")),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ];
+          },
+          body:  TabBarView(
+            children:[
+             TCategoryTab(),
+              const Center(child: Text("It's rainy here")),
+              const Center(child: Text("It's sunny here")),
+              const Center(child: Text("It's rainy here")),
+              const Center(child: Text("It's sunny here")),
+            ],
+          ),
+        ),
+
+      ),
+    );
+  }
+}
+
