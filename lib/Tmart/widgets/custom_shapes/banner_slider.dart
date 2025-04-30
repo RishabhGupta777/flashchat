@@ -1,3 +1,4 @@
+import 'package:flashchat/Tmart/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -13,14 +14,21 @@ class BannerSlider extends StatefulWidget {
 
 class _BannerSliderState extends State<BannerSlider> {
   int _currentIndex = 0; // Tracks the currently displayed image
+  List<Map<String, dynamic>> banners= [];
 
-  final List<String> imagePaths = [
-    "assets/images/banner1.png",
-    "assets/images/banner1.png",
-    "assets/images/banner1.png",
-    "assets/images/banner1.png",
-    "assets/images/banner1.png",
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    loadBanner();
+  }
+
+  Future<void> loadBanner() async {
+    final loadedProducts = await FirestoreService.fetchCollection('banner');
+    setState(() {
+      banners = loadedProducts;
+    });
+  }
 
 
   @override
@@ -41,7 +49,8 @@ class _BannerSliderState extends State<BannerSlider> {
               });
             },
           ),
-          items: imagePaths.map((imagePath)  {
+          items: banners.map((banner)  {
+            final imageUrl=banner['pic'];
             return Builder(
               builder: (BuildContext context) {
                 return Padding(
@@ -50,7 +59,7 @@ class _BannerSliderState extends State<BannerSlider> {
                     width: MediaQuery.of(context).size.width,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: Image(image:AssetImage(imagePath),fit: BoxFit.contain,)),
+                        child:Image.network(imageUrl, fit: BoxFit.cover),),
                   ),
                 );
               },
@@ -58,14 +67,15 @@ class _BannerSliderState extends State<BannerSlider> {
           }).toList(),
         ),
 
+
         // **Dot Indicator Below the Carousel**
         const SizedBox(height: 1),
         AnimatedSmoothIndicator(
           activeIndex: _currentIndex, // Binds to current image index
-          count: imagePaths.length, // Number of dots
+          count: banners.length, // Number of dots
           effect: const ExpandingDotsEffect(
-            dotHeight: 8,
-            dotWidth: 8,
+            dotHeight: 8.0,
+            dotWidth: 8.0,
             activeDotColor: Colors.blue, // Active dot color
             dotColor: Colors.grey, // Inactive dot color
           ),

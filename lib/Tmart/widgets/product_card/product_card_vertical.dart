@@ -9,7 +9,14 @@ import 'package:flutter/material.dart';
 class TProductCardVertical extends StatelessWidget {
   const TProductCardVertical({
     super.key,
+  this.name=" ",
+    this.imageUrl=" ",
+    this.price=" ",
   });
+  final String name;
+  final String imageUrl;
+  final String price;
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,7 @@ class TProductCardVertical extends StatelessWidget {
                     height: 150,
                     width: 150,
                     radius: 15,
-                    child:Image(image:AssetImage("assets/images/Sneaker.png",),fit: BoxFit.contain,)),
+                    child: Image.network(imageUrl, height: 100, fit: BoxFit.cover),),
                   Positioned(
                     top: 12,
                     left: 12,
@@ -59,12 +66,12 @@ class TProductCardVertical extends StatelessWidget {
                 ],
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal:12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TProductTitleText(title: "White Nike Air Shoe",isLarge:false,),
+                  TProductTitleText(title:name,isLarge:false,),
                   SizedBox(height: 5,),
                   TBrandName(),
                 ],
@@ -73,9 +80,9 @@ class TProductCardVertical extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(left:14),
-                  child: TProductPriceText(price:"435",isLarge: false,),
+                  child: TProductPriceText(price:price,isLarge: false,),
                 ),
                 Container(
                   decoration: const BoxDecoration(

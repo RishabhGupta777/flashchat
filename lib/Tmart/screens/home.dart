@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashchat/Tmart/colors.dart';
+import 'package:flashchat/Tmart/firestore_service.dart';
 import 'package:flashchat/Tmart/screens/all_product.dart';
 import 'package:flashchat/Tmart/screens/cart_screen.dart';
 import 'package:flashchat/Tmart/screens/sub_Categories_screen.dart';
@@ -19,7 +21,24 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+
 class _HomeState extends State<Home> {
+  List<Map<String, dynamic>> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadProducts();
+  }
+
+  Future<void> loadProducts() async {
+    final loadedProducts = await FirestoreService.fetchCollection('Products');
+    setState(() {
+      products = loadedProducts;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,10 +117,18 @@ class _HomeState extends State<Home> {
             const BannerSlider(),
           SizedBox(height: 2,),
           TSectionHeading(title: 'Popular Products', onPressed: ()=>Navigator.push(context,MaterialPageRoute(builder:(context)=>AllProduct())),),
-          TGridLayout(itemCount: 6,
-              itemBuilder:    (_, int index) {
-            return const TProductCardVertical();
-          },),
+            TGridLayout(
+              itemCount: products.length,
+              itemBuilder: (_, int index) {
+                final product = products[index];
+                return TProductCardVertical(
+                  name: product['name'],
+                  imageUrl:product['pic'],
+                  price:product['price'],
+                );
+              },
+            ),
+
           ],
         ),
       ),
