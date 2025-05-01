@@ -24,10 +24,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Map<String, dynamic>> products = [];
+  List<Map<String, dynamic>> categories = [];
+
 
   @override
   void initState() {
     super.initState();
+    loadCategories();
     loadProducts();
   }
 
@@ -35,6 +38,12 @@ class _HomeState extends State<Home> {
     final loadedProducts = await FirestoreService.fetchCollection('Products');
     setState(() {
       products = loadedProducts;
+    });
+  }
+  Future<void> loadCategories() async {
+    final loadedProducts = await FirestoreService.fetchCollection('category');
+    setState(() {
+      categories = loadedProducts;
     });
   }
 
@@ -99,9 +108,12 @@ class _HomeState extends State<Home> {
                            child: ListView.builder(
                              scrollDirection: Axis.horizontal,
                              shrinkWrap: true,
-                             itemCount: 6,
+                             itemCount: categories.length,
                              itemBuilder: (BuildContext context, int index) {
+                               final category = categories[index];
                                return TVerticalImageText(
+                                 name:category['name'],
+                                 imageUrl:category['pic'],
                                  onTap:()=> Navigator.push(context, MaterialPageRoute(builder:(context)=>SubCategoriesScreen())),);
                              }
                            ),
@@ -139,28 +151,34 @@ class _HomeState extends State<Home> {
 class TVerticalImageText extends StatelessWidget {
   const TVerticalImageText({
     super.key,
+    this.name=" ",
+    this.imageUrl=" ",
     this.onTap,
   });
+  final String name;
+  final String imageUrl;
   final Function() ? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.only(right:9,left: 15),
         child: Column(
           children: [
-            CircleAvatar(
-              radius: 30,
+            TRoundedContainer(
+              radius: 60,
+              height: 60,
+              width: 60,
               backgroundColor: Colors.white,
-              backgroundImage: AssetImage("assets/images/shoes/black.png"),
+              child:  Image.network(imageUrl, height: 100, fit: BoxFit.cover),
             ),
             SizedBox(height: 2,),
             SizedBox(
               width:55,
               child: Text(
-                  'Nike Shoes',
+                  name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
