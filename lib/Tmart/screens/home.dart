@@ -183,7 +183,7 @@ class TVerticalImageText extends StatelessWidget {
             ),
             SizedBox(height: 2,),
             SizedBox(
-              width:55,
+              width:60,
               child: Text(
                   name,
                 maxLines: 1,

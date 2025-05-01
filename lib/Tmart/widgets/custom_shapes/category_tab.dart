@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_showcase.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
 import 'package:flashchat/Tmart/widgets/product_card/grid_layout.dart';
@@ -18,8 +19,24 @@ class TCategoryTab extends StatelessWidget {
           const TBrandShowcase(images: ["assets/images/Sneaker.png","assets/images/shoe.png","assets/images/Sneaker.png"],),
           const SizedBox(height: 4,),
           const TSectionHeading(title: 'You might like'),
-          TGridLayout(itemCount: 4,
-              itemBuilder: (_,context)=>const TProductCardVertical()),
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('Products').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+
+                final products = snapshot.data!.docs;
+
+                return TGridLayout(
+                  itemCount: products.length,
+                  itemBuilder: (_, int index) {
+                    final product = products[index];
+                    return TProductCardVertical(
+                      document: product,
+                    );
+                  },
+                );
+              }
+          ),
           const SizedBox(height: 4,),
         ],
       ),

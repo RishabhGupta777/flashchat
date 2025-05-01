@@ -36,10 +36,9 @@ class _BannerSliderState extends State<BannerSlider> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 3),
         CarouselSlider(
           options: CarouselOptions(
-            viewportFraction: 0.9,
+            viewportFraction: 1.0,
             autoPlay: true,
             enlargeCenterPage: true, // Enables the zoom effect
             enlargeFactor: 0.1, // Controls how much bigger the center image appears
@@ -54,22 +53,21 @@ class _BannerSliderState extends State<BannerSlider> {
             return Builder(
               builder: (BuildContext context) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical:12,horizontal: 3),
+                  padding: const EdgeInsets.symmetric(vertical:12,horizontal:8),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child:Image.network(imageUrl, fit: BoxFit.cover),),
+                        child:Image.network(imageUrl,fit: BoxFit.cover),),
                   ),
                 );
-              },
+              },    //width: MediaQuery.of(context).size.width,
             );
           }).toList(),
         ),
 
 
         // **Dot Indicator Below the Carousel**
-        const SizedBox(height: 1),
         AnimatedSmoothIndicator(
           activeIndex: _currentIndex, // Binds to current image index
           count: banners.length, // Number of dots

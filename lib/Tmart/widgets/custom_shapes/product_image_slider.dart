@@ -5,12 +5,19 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 import 'package:flashchat/Tmart/widgets/product_card/product_card_vertical.dart';
 
 
-class TProductImageSlider extends StatelessWidget {
+class TProductImageSlider extends StatefulWidget {
   const TProductImageSlider({
     super.key,
    required this.images,
   });
   final List images;
+
+  @override
+  State<TProductImageSlider> createState() => _TProductImageSliderState();
+}
+
+class _TProductImageSliderState extends State<TProductImageSlider> {
+  int selectedImageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,7 @@ class TProductImageSlider extends StatelessWidget {
                 height: 350,
                 width: 350,
                 child: Image.network(
-                  images[0],
+                  widget.images[selectedImageIndex],
                   fit: BoxFit.cover, // Ensures it fills the rounded shape properly
                 ),),
               Positioned(
@@ -39,20 +46,27 @@ class TProductImageSlider extends StatelessWidget {
         SizedBox(
           height: 78,
           child: ListView.separated(
-            itemCount: images.length,
+            itemCount: widget.images.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             physics: BouncingScrollPhysics(), // Allows smooth scrolling
             separatorBuilder: (_,__)=>SizedBox(width:6),
-            itemBuilder: (_,index)=>TRoundedContainer(
-              margin: 2,
-              width:78,
-              radius: 0,
-              showBorder: true,
-              borderColor: Colors.black45,
-              child:Image.network(
-                images[index],
-                fit: BoxFit.cover, // Ensures it fills the rounded shape properly
+            itemBuilder: (_,index)=>GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedImageIndex = index;
+                });
+              },
+              child: TRoundedContainer(
+                margin: 2,
+                width:78,
+                radius: 0,
+                showBorder: true,
+                borderColor: selectedImageIndex == index ? Colors.blue : Colors.black26,
+                child:Image.network(
+                  widget.images[index],
+                  fit: BoxFit.cover, // Ensures it fills the rounded shape properly
+                ),
               ),
             ),
           ),

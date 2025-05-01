@@ -21,6 +21,7 @@ class TProductCardVertical extends StatelessWidget {
     final name = data['name'] ?? '';
     final imageUrl = (data['pic'] as List).isNotEmpty ? data['pic'][0] : '';
     final price = data['price'] ?? '';
+    final brand = data['brand'] ?? '';
 
 
     return GestureDetector(
@@ -78,7 +79,7 @@ class TProductCardVertical extends StatelessWidget {
                 children: [
                   TProductTitleText(title:name,isLarge:false,),
                   SizedBox(height: 5,),
-                  TBrandName(),
+                  TBrandName(title: brand,),
                 ],
               ),
             ),

@@ -71,7 +71,7 @@ class _StoreState extends State<Store> {
                         unselectedLabelColor: Colors.grey,
                         labelColor: TColors.primary,
                         tabs: [
-                          Tab(child: Text("Sports")),
+                          Tab(child: Text("Shoes")),
                           Tab(child: Text("Furniture")),
                           Tab(child: Text("Electronics")),
                           Tab(child: Text("Clothes")),
