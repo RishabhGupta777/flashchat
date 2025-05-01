@@ -129,17 +129,24 @@ class _HomeState extends State<Home> {
             const BannerSlider(),
           SizedBox(height: 2,),
           TSectionHeading(title: 'Popular Products', onPressed: ()=>Navigator.push(context,MaterialPageRoute(builder:(context)=>AllProduct())),),
-            TGridLayout(
-              itemCount: products.length,
-              itemBuilder: (_, int index) {
-                final product = products[index];
-                return TProductCardVertical(
-                  name: product['name'],
-                  imageUrl:product['pic'],
-                  price:product['price'],
-                );
-              },
-            ),
+    StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance.collection('Products').snapshots(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+
+      final products = snapshot.data!.docs;
+
+      return TGridLayout(
+        itemCount: products.length,
+        itemBuilder: (_, int index) {
+          final product = products[index];
+          return TProductCardVertical(
+            document: product,
+          );
+        },
+      );
+    }
+    )
 
           ],
         ),

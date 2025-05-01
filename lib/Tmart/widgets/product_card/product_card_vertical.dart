@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashchat/Tmart/screens/product_detail.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_name.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/circular_icon.dart';
@@ -9,22 +10,26 @@ import 'package:flutter/material.dart';
 class TProductCardVertical extends StatelessWidget {
   const TProductCardVertical({
     super.key,
-  this.name=" ",
-    this.imageUrl=" ",
-    this.price=" ",
+   this.document,
   });
-  final String name;
-  final String imageUrl;
-  final String price;
+  final DocumentSnapshot ? document;
 
 
   @override
   Widget build(BuildContext context) {
+    final data = document!.data() as Map<String, dynamic>;
+    final name = data['name'] ?? '';
+    final imageUrl = (data['pic'] as List).isNotEmpty ? data['pic'][0] : '';
+    final price = data['price'] ?? '';
+
+
     return GestureDetector(
       onTap: (){
         Navigator.push( context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(),
+            builder: (context) => ProductDetailScreen(
+              document : document!
+            ),
           ),);
       },
       child: Container(

@@ -7,7 +7,19 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/brand_name.dart';
 class TProductMetaData extends StatelessWidget {
   const TProductMetaData({
     super.key,
+   required this.name,
+   required this.price,
+   required this.brand,
+    required this.brandLogo,
+
   });
+  final String name;
+  final String  price;
+  final String  brand;
+  final String  brandLogo;
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +37,7 @@ class TProductMetaData extends StatelessWidget {
             SizedBox(width: 10),
             Text("₹250",style: Theme.of(context).textTheme.titleSmall!.apply(decoration:TextDecoration.lineThrough),),
             SizedBox(width: 10),
-            TProductPriceText(price: "175"),
+            TProductPriceText(price: price),
           ],
         ),
         SizedBox(height: 5),
@@ -33,7 +45,7 @@ class TProductMetaData extends StatelessWidget {
         ///Title
         TProductTitleText(
             isLarge: false,
-            title: 'Brown Nike Sports Shoes'
+            title: name,
         ),
         SizedBox(height: 5),
 
@@ -50,16 +62,15 @@ class TProductMetaData extends StatelessWidget {
         Row(
           children: [
             TRoundedContainer(
-              height: 22,
-              width: 22,
-              radius: 11,
-              child:Image.asset(
-                "assets/images/shoes/white.png",
+              height: 30,
+              radius:0,
+              child:Image.network(
+                brandLogo,
                 fit: BoxFit.cover, // Ensures it fills the rounded shape properly
               ),
             ),
             SizedBox(width: 2,),
-            TBrandName(),
+            TBrandName(title: brand),
           ],
         ),
 

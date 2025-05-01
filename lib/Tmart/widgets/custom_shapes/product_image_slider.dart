@@ -8,7 +8,9 @@ import 'package:flashchat/Tmart/widgets/product_card/product_card_vertical.dart'
 class TProductImageSlider extends StatelessWidget {
   const TProductImageSlider({
     super.key,
+   required this.images,
   });
+  final List images;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class TProductImageSlider extends StatelessWidget {
               SizedBox(
                 height: 350,
                 width: 350,
-                child: Image.asset(
-                  "assets/images/shoes/black.png",
+                child: Image.network(
+                  images[0],
                   fit: BoxFit.cover, // Ensures it fills the rounded shape properly
                 ),),
               Positioned(
@@ -37,7 +39,7 @@ class TProductImageSlider extends StatelessWidget {
         SizedBox(
           height: 78,
           child: ListView.separated(
-            itemCount: 5,
+            itemCount: images.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             physics: BouncingScrollPhysics(), // Allows smooth scrolling
@@ -45,10 +47,11 @@ class TProductImageSlider extends StatelessWidget {
             itemBuilder: (_,index)=>TRoundedContainer(
               margin: 2,
               width:78,
+              radius: 0,
               showBorder: true,
-              borderColor: Colors.white,
-              child:Image.asset(
-                "assets/images/shoes/black.png",
+              borderColor: Colors.black45,
+              child:Image.network(
+                images[index],
                 fit: BoxFit.cover, // Ensures it fills the rounded shape properly
               ),
             ),

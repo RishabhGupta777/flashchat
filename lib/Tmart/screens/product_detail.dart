@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashchat/Tmart/screens/check_out_screen.dart';
 import 'package:flashchat/Tmart/screens/product_reviews.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/bottom_add_to_cart.dart';
@@ -12,7 +13,9 @@ import 'package:flutter/material.dart';
 
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key});
+
+  final DocumentSnapshot  document;
+  const ProductDetailScreen({super.key,required this.document});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -21,13 +24,21 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final data = widget.document.data() as Map<String, dynamic>;
+    final name = data['name'] ?? '';
+    final brand = data['brand'] ?? '';
+    final price = data['price'] ?? '';
+    final brandLogo = data['brandLogo'] ?? '';
+    final images = List<String>.from(data['pic'] ?? []);
+
+
     return Scaffold(
       bottomNavigationBar: TBottomAddToCart(),
       body:SingleChildScrollView(
         child:Column(
           children: [
             ///product image slider
-            TProductImageSlider(),
+            TProductImageSlider(images: images),
 
             ///Rating and Share button
             Padding(
@@ -36,7 +47,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: [
                   TRatingAndShare(),
                   
-                  TProductMetaData(),
+                  TProductMetaData(
+                    brand: brand,
+                    name:name,
+                    price:price,
+                    brandLogo:brandLogo,
+                  ),
 
                   ProductAttributes(),
                   SizedBox(height: 8,),
