@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class TCircularIcon extends StatelessWidget {
   const TCircularIcon({
     super.key,
+    this.onTap,
     this.width=40,
     this.height=40,
     this.backgroundColor=Colors.white,
@@ -11,6 +12,7 @@ class TCircularIcon extends StatelessWidget {
     this.color,
     this.size,
   });
+  final VoidCallback? onTap;
   final double width;
   final double height;
   final Color backgroundColor;
@@ -26,7 +28,7 @@ class TCircularIcon extends StatelessWidget {
         height: height,
         backgroundColor:backgroundColor,
         radius: 40,
-        child:Center(child: IconButton(onPressed: (){}, icon:Icon(icon, color:color,size: size,)))
+        child:Center(child: IconButton(onPressed:onTap, icon:Icon(icon, color:color,size: size,)))
     );
   }
 }

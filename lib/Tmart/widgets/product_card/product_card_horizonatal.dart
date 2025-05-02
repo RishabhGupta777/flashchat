@@ -43,7 +43,7 @@ class ProductCardHorizonatal extends StatelessWidget {
           Positioned(
             top:2,
             right: 2,
-            child: TCircularIcon(icon: Icons.favorite,color: Colors.red,),
+            child: TCircularIcon(onTap:(){},icon: Icons.favorite,color: Colors.red,),
           ),
         ],
       ),

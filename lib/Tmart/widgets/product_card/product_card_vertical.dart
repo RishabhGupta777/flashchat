@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat/Tmart/screens/product_detail.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_name.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/circular_icon.dart';
@@ -7,17 +8,66 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/product_title_text.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 import 'package:flutter/material.dart';
 
-class TProductCardVertical extends StatelessWidget {
+class TProductCardVertical extends StatefulWidget {
   const TProductCardVertical({
     super.key,
    this.document,
   });
   final DocumentSnapshot ? document;
 
+  @override
+  State<TProductCardVertical> createState() => _TProductCardVerticalState();
+}
+
+class _TProductCardVerticalState extends State<TProductCardVertical> {
+  bool isWishlisted = false;
+
+  final userId = FirebaseAuth.instance.currentUser?.uid; // Use actual user ID
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfWishlisted();
+  }
+
+  Future<void> checkIfWishlisted() async {
+    final docId = widget.document!.id;
+    final doc = await FirebaseFirestore.instance
+        .collection('wishlists')
+        .doc(userId)
+        .collection('items')
+        .doc(docId)
+        .get();
+
+    if (doc.exists) {
+      setState(() {
+        isWishlisted = true;
+      });
+    }
+  }
+
+  Future<void> toggleWishlist() async {
+    final docId = widget.document!.id;
+    final itemRef = FirebaseFirestore.instance
+        .collection('wishlists')
+        .doc(userId)
+        .collection('items')
+        .doc(docId);
+
+    if (isWishlisted) {
+      await itemRef.delete();
+    } else {
+      await itemRef.set(widget.document!.data() as Map<String, dynamic>);
+    }
+
+    setState(() {
+      isWishlisted = !isWishlisted;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final data = document!.data() as Map<String, dynamic>;
+    final data = widget.document!.data() as Map<String, dynamic>;
     final name = data['name'] ?? '';
     final imageUrl = (data['pic'] as List).isNotEmpty ? data['pic'][0] : '';
     final price = data['price'] ?? '';
@@ -29,7 +79,7 @@ class TProductCardVertical extends StatelessWidget {
         Navigator.push( context,
           MaterialPageRoute(
             builder: (context) => ProductDetailScreen(
-              document : document!
+              document : widget.document!
             ),
           ),);
       },
@@ -67,7 +117,11 @@ class TProductCardVertical extends StatelessWidget {
                   Positioned(
                     top:2,
                     right: 2,
-                    child: TCircularIcon(icon: Icons.favorite,color: Colors.red,),
+                    child: TCircularIcon(
+                      onTap: toggleWishlist,
+                      icon: isWishlisted ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.red,
+                    ),
                   ),
                 ],
               ),

@@ -25,11 +25,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final data = widget.document.data() as Map<String, dynamic>;
+
+    ///Image management
+    final images = List<String>.from(data['pic'] ?? []);
+    ///MetaData management
     final name = data['name'] ?? '';
     final brand = data['brand'] ?? '';
     final price = data['price'] ?? '';
     final brandLogo = data['brandLogo'] ?? '';
-    final images = List<String>.from(data['pic'] ?? []);
+
+    ///Attributes Management
+    final attributes = List<Map<String, dynamic>>.from(data['attribute'] ?? []);
 
 
     return Scaffold(
@@ -54,7 +60,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     brandLogo:brandLogo,
                   ),
 
-                  ProductAttributes(),
+                  ProductAttributes(attributes: attributes),
                   SizedBox(height: 8,),
 
                   ///checkOut Button

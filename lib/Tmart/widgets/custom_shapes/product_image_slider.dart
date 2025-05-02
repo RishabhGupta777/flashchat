@@ -39,7 +39,7 @@ class _TProductImageSliderState extends State<TProductImageSlider> {
               Positioned(
                 top:10,
                   right: 10,
-                  child: TCircularIcon(icon: Icons.favorite,color: Colors.red,)),
+                  child: TCircularIcon(onTap:(){},icon: Icons.favorite,color: Colors.red,)),
             ],
           ),
         ),
