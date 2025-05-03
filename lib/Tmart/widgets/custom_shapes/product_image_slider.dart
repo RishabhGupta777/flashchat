@@ -13,9 +13,11 @@ class TProductImageSlider extends StatefulWidget {
     super.key,
    required this.images,
     this.document,
+    required this.onImageChange,
   });
   final List images;
   final DocumentSnapshot ? document;
+  final Function(int index) onImageChange;
 
   @override
   State<TProductImageSlider> createState() => _TProductImageSliderState();
@@ -90,6 +92,7 @@ class _TProductImageSliderState extends State<TProductImageSlider> {
                 setState(() {
                   selectedImageIndex = index;
                 });
+                widget.onImageChange(index); // notify parent
               },
               child: TRoundedContainer(
                 margin: 2,

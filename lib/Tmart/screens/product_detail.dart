@@ -22,16 +22,20 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  int selectedVariationIndex = 0;
   @override
   Widget build(BuildContext context) {
     final data = widget.document.data() as Map<String, dynamic>;
 
     ///Image management
-    final images = List<String>.from(data['pic'] ?? []);
+    final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
+    final images = variations.map((v) => v['pic'] as String).toList();  // for slider
+    final prices = variations.map((v) => v['price'].toString()).toList();  // or 'name' if you have it
+
     ///MetaData management
     final name = data['name'] ?? '';
     final brand = data['brand'] ?? '';
-    final price = data['price'] ?? '';
+    final price = prices[selectedVariationIndex]; // get current price
     final brandLogo = data['brandLogo'] ?? '';
 
     ///Attributes Management
@@ -44,7 +48,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child:Column(
           children: [
             ///product image slider
-            TProductImageSlider(images: images,document:widget.document,),
+            TProductImageSlider(
+             onImageChange: (index) {
+                     setState(() {
+                     selectedVariationIndex = index;
+                   });
+               },
+              images: images,document:widget.document,),
 
             ///Rating and Share button
             Padding(

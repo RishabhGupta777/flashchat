@@ -47,9 +47,12 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
   Widget build(BuildContext context) {
     final data = widget.document!.data() as Map<String, dynamic>;
     final name = data['name'] ?? '';
-    final imageUrl = (data['pic'] as List).isNotEmpty ? data['pic'][0] : '';
-    final price = data['price'] ?? '';
     final brand = data['brand'] ?? '';
+
+    final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
+    final variation = variations[0];
+    final imageUrl=variation['pic'];
+    final price=variation['price'];
 
 
     return GestureDetector(
