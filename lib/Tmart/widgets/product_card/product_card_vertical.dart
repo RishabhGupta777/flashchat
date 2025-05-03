@@ -6,6 +6,7 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/circular_icon.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/product_price_text.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/product_title_text.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
+import 'package:flashchat/Tmart/wishlist_service.dart';
 import 'package:flutter/material.dart';
 
 class TProductCardVertical extends StatefulWidget {
@@ -22,48 +23,25 @@ class TProductCardVertical extends StatefulWidget {
 class _TProductCardVerticalState extends State<TProductCardVertical> {
   bool isWishlisted = false;
 
-  final userId = FirebaseAuth.instance.currentUser?.uid; // Use actual user ID
-
   @override
   void initState() {
     super.initState();
-    checkIfWishlisted();
-  }
-
-  Future<void> checkIfWishlisted() async {
-    final docId = widget.document!.id;
-    final doc = await FirebaseFirestore.instance
-        .collection('wishlists')
-        .doc(userId)
-        .collection('items')
-        .doc(docId)
-        .get();
-
-    if (doc.exists) {
-      setState(() {
-        isWishlisted = true;
-      });
-    }
+    WishlistService.checkIfWishlisted(widget.document!.id).then((exists) {
+      if (exists) {
+        setState(() {
+          isWishlisted = true;
+        });
+      }
+    });
   }
 
   Future<void> toggleWishlist() async {
-    final docId = widget.document!.id;
-    final itemRef = FirebaseFirestore.instance
-        .collection('wishlists')
-        .doc(userId)
-        .collection('items')
-        .doc(docId);
-
-    if (isWishlisted) {
-      await itemRef.delete();
-    } else {
-      await itemRef.set(widget.document!.data() as Map<String, dynamic>);
-    }
-
+    await WishlistService.toggleWishlist(widget.document!, isWishlisted);
     setState(() {
       isWishlisted = !isWishlisted;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

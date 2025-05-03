@@ -44,7 +44,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child:Column(
           children: [
             ///product image slider
-            TProductImageSlider(images: images),
+            TProductImageSlider(images: images,document:widget.document,),
 
             ///Rating and Share button
             Padding(
