@@ -47,7 +47,7 @@ class _AllBrandScreenState extends State<AllBrandScreen> {
                       brandName: brand['name'],
                       brandLogo: brand['logo'],
                       totalItems: brand['totalItems'],
-                      onTap: () {
+                      onTap: (){
                         Navigator.push(
                           context,
                           MaterialPageRoute(
