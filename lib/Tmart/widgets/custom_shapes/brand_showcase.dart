@@ -18,7 +18,7 @@ class TBrandShowcase extends StatelessWidget {
       backgroundColor: Colors.white,
       child:Column(
         children: [
-          const TBrandCard(showBorder: false),
+          const TBrandCard(showBorder: false,brandName: 'Nike',brandLogo: "https://firebasestorage.googleapis.com/v0/b/jioos-3ae31.appspot.com/o/products%2FbrandPic%2Fb5.jpeg?alt=media&token=c490cb62-0407-40d1-bd52-b2214088416a",),
           Row(
               children: images.map((image)=>BrandTopImagesWidget(image,context)).toList()
           )

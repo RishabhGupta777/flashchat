@@ -5,11 +5,17 @@ import 'package:flutter/material.dart';
 class TBrandCard extends StatelessWidget {
   const TBrandCard({
     super.key,
+    this.brandName=" ",
+    this.brandLogo=" ",
     required this.showBorder,
     this.onTap,
+    this.totalItems=256,
   });
+  final String brandName;
+  final String brandLogo;
   final bool showBorder;
   final Function() ? onTap;
+  final int totalItems;
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +36,14 @@ class TBrandCard extends StatelessWidget {
             SizedBox(
                 width:60,
                 height: 60,
-                child: Image.asset("assets/images/shoe.png")),
-            const Column(
+                child:Image.network(brandLogo, height: 40, width: 40),),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TBrandName(),
+                TBrandName(title: brandName,),
                 SizedBox(
                     width:86 ,
-                    child: Text("256 products",maxLines: 1,overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black26),))
+                    child: Text("$totalItems products",maxLines: 1,overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black26),))
               ],
             )
           ],

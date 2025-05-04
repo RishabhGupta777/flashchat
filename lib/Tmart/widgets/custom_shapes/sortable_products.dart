@@ -5,9 +5,9 @@ import 'package:flashchat/Tmart/widgets/product_card/product_card_vertical.dart'
 import 'package:flutter/material.dart';
 
 class TSortableProducts extends StatefulWidget {
-  const TSortableProducts({
-    super.key,
-  });
+  final String? brandName;
+
+  const TSortableProducts({super.key, this.brandName});
 
   @override
   State<TSortableProducts> createState() => _TSortableProductsState();
@@ -17,7 +17,15 @@ class _TSortableProductsState extends State<TSortableProducts> {
   String selectedSortOption = 'Name';
 
   Future<List<QueryDocumentSnapshot>> _fetchSortedProducts() async {
-    final snapshot = await FirebaseFirestore.instance.collection('Products').get();
+
+    Query collectionQuery = FirebaseFirestore.instance.collection('Products');
+
+    // Filter by brand if brandName is provided
+    if (widget.brandName != null && widget.brandName!.isNotEmpty) {
+      collectionQuery = collectionQuery.where('brand', isEqualTo: widget.brandName);
+    }
+
+    final snapshot = await collectionQuery.get();
     final products = snapshot.docs;
 
     products.sort((a, b) {
@@ -39,7 +47,7 @@ class _TSortableProductsState extends State<TSortableProducts> {
         case 'Name':
           return aName.compareTo(bName);
         case 'Higher to Lower Price':
-          return bPrice.compareTo(aPrice); //→ High to Low
+          return bPrice.compareTo(aPrice); //→ High to Low  if b>a output=1
         case 'Lower to Higher Price':
           return aPrice.compareTo(bPrice); //->Low to High
         case 'Newest':

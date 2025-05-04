@@ -1,5 +1,8 @@
+import 'package:flashchat/Tmart/brand_service.dart';
 import 'package:flashchat/Tmart/colors.dart';
+import 'package:flashchat/Tmart/help.dart';
 import 'package:flashchat/Tmart/screens/all_brand_screen.dart';
+import 'package:flashchat/Tmart/screens/brand_products.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_counter_icon.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/category_tab.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
@@ -16,10 +19,11 @@ class Store extends StatefulWidget {
 }
 
 class _StoreState extends State<Store> {
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 3,
       child: Scaffold(
         appBar:AppBar(
           title: const Text('Store',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: TColors.primary),),
@@ -48,16 +52,43 @@ class _StoreState extends State<Store> {
                     children: [
                       const TSearchContainer(enableBorderColor: Colors.black12,focusBorderColor: Colors.black12,),
                       const SizedBox(height: 10,),
-                       TSectionHeading(title:"Featured Brands",onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AllBrandScreen()));
+                       TSectionHeading(title:"Featured Brands",onPressed: ()async{
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AllBrandScreen()));
                       }, ),
-                      TGridLayout(
-                        mainAxisExtent: 76,
-                        itemCount: 4,
-                        itemBuilder:    (_, int index) {
-                          return  const TBrandCard(showBorder: true,);
+                      FutureBuilder<List<Map<String, dynamic>>>(
+                        future: getAllBrands(limit: 3), // limit to 2 brands
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) return const CircularProgressIndicator();
+
+                          final brands = snapshot.data!;
+                          return TGridLayout(
+                            itemCount: brands.length,
+                            mainAxisExtent: 76,
+                            itemBuilder: (_, index) {
+                              final brand = brands[index];
+                              return TBrandCard(
+                                showBorder: true,
+                                brandName: brand['name'],
+                                brandLogo: brand['logo'],
+                                totalItems: brand['totalItems'],
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => BrandProducts(
+                                        brandName: brand['name'],
+                                        brandLogo: brand['logo'],
+                                        totalItems: brand['totalItems'],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
                         },
                       )
+
 
                     ],
                   ),
@@ -72,10 +103,8 @@ class _StoreState extends State<Store> {
                         labelColor: TColors.primary,
                         tabs: [
                           Tab(child: Text("Shoes")),
-                          Tab(child: Text("Furniture")),
                           Tab(child: Text("Electronics")),
                           Tab(child: Text("Clothes")),
-                          Tab(child: Text("Cosmetics")),
                         ],
                       ),
                     ),
@@ -87,8 +116,6 @@ class _StoreState extends State<Store> {
           body:  TabBarView(
             children:[
              TCategoryTab(),
-              const Center(child: Text("It's rainy here")),
-              const Center(child: Text("It's sunny here")),
               const Center(child: Text("It's rainy here")),
               const Center(child: Text("It's sunny here")),
             ],
