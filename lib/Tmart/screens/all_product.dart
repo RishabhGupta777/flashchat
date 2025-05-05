@@ -2,7 +2,9 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/sortable_products.dart';
 import 'package:flutter/material.dart';
 
 class AllProduct extends StatefulWidget {
-  const AllProduct({super.key});
+  final String ? category;
+
+  const AllProduct({super.key,this.category});
 
   @override
   State<AllProduct> createState() => _AllProductState();
@@ -16,7 +18,7 @@ class _AllProductState extends State<AllProduct> {
         title:Text('Popular Products'),
       ),
       body: SingleChildScrollView(
-        child: TSortableProducts(),
+        child: TSortableProducts(category: widget.category),
       ),
     );
   }

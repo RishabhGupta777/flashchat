@@ -33,7 +33,7 @@ class TBrandShowcaseList extends StatelessWidget {
             final firstDoc = productList.first;
             final brandLogo = firstDoc['brandLogo'];
 
-            // 🛠 Extract images from variation[0], [1], and [2]
+            //  Extract images from variation[0], [1], and [2]
             List<String> images = [];
 
             for (var doc in productList) {

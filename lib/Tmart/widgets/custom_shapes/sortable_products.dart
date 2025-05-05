@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 
 class TSortableProducts extends StatefulWidget {
   final String? brandName;
+  final String? category;
 
-  const TSortableProducts({super.key, this.brandName});
+  const TSortableProducts({super.key, this.brandName, this.category});
 
   @override
   State<TSortableProducts> createState() => _TSortableProductsState();
@@ -24,6 +25,12 @@ class _TSortableProductsState extends State<TSortableProducts> {
     if (widget.brandName != null && widget.brandName!.isNotEmpty) {
       collectionQuery = collectionQuery.where('brand', isEqualTo: widget.brandName);
     }
+
+    //Filter by Category if Category is provided
+    if (widget.category != null && widget.category!.isNotEmpty) {
+      collectionQuery = collectionQuery.where('category', isEqualTo: widget.category);
+    }
+
 
     final snapshot = await collectionQuery.get();
     final products = snapshot.docs;

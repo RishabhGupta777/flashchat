@@ -52,13 +52,13 @@ class _StoreState extends State<Store> {
                     children: [
                       const TSearchContainer(enableBorderColor: Colors.black12,focusBorderColor: Colors.black12,),
                       const SizedBox(height: 10,),
-                       TSectionHeading(title:"Featured Brands",onPressed: ()async{
+                       TSectionHeading(title:"Featured Brands",onPressed: (){
                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AllBrandScreen()));
                       }, ),
                       FutureBuilder<List<Map<String, dynamic>>>(
                         future: getAllBrands(limit: 3), // limit to 2 brands
                         builder: (context, snapshot) {
-                          if (!snapshot.hasData) return const CircularProgressIndicator();
+                          if (!snapshot.hasData) return Center(child: const CircularProgressIndicator());
 
                           final brands = snapshot.data!;
                           return TGridLayout(

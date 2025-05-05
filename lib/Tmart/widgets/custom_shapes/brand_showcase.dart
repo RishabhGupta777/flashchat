@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flashchat/Tmart/screens/brand_products.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 
-class TBrandShowcase extends StatelessWidget {
+class TBrandShowcase extends StatefulWidget {
   final List<String> images;
   final String brandName;
   final String brandLogo;
@@ -15,25 +17,60 @@ class TBrandShowcase extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return TRoundedContainer(
-      showBorder: true,
-      borderColor: Colors.black45,
-      margin:8,
-      backgroundColor: Colors.white,
-      child:Column(
-        children: [
-          TBrandCard(
-            showBorder: false,
-            brandName: brandName,
-            brandLogo: brandLogo,
-          ),
-          Row(
-              children: images.map((image)=>BrandTopImagesWidget(image,context)).toList()
-          )
-        ],
-      ),
+  State<TBrandShowcase> createState() => _TBrandShowcaseState();
+}
 
+class _TBrandShowcaseState extends State<TBrandShowcase> {
+  int productCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBrandProductCount();
+  }
+
+  Future<void> _fetchBrandProductCount() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Products')
+        .where('brand', isEqualTo: widget.brandName)
+        .get();
+
+    setState(() {
+      productCount = snapshot.size;
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>BrandProducts(
+          brandName: widget.brandName,
+          brandLogo: widget.brandLogo,
+          totalItems: productCount,
+        )));
+      },
+      child: TRoundedContainer(
+        showBorder: true,
+        borderColor: Colors.black45,
+        margin:8,
+        backgroundColor: Colors.white,
+        child:Column(
+          children: [
+            TBrandCard(
+              showBorder: false,
+              brandName: widget.brandName,
+              brandLogo: widget.brandLogo,
+              totalItems:productCount,
+            ),
+            Row(
+                children: widget.images.map((image)=>BrandTopImagesWidget(image,context)).toList()
+            )
+          ],
+        ),
+
+      ),
     );
   }
 

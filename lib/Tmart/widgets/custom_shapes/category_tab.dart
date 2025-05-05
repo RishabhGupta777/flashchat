@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flashchat/Tmart/screens/all_product.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brandShowcaseList.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_showcase.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
@@ -18,7 +19,7 @@ class TCategoryTab extends StatelessWidget {
           const SizedBox(height:65,),
           TBrandShowcaseList(category: category), //  Dynamic Showcase
           const SizedBox(height: 4,),
-          const TSectionHeading(title: 'You might like'),
+          TSectionHeading(title: 'You might like', onPressed: ()=>Navigator.push(context,MaterialPageRoute(builder:(context)=>AllProduct(category: category,))),),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('Products')
