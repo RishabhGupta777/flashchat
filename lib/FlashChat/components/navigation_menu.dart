@@ -1,3 +1,4 @@
+import 'package:flashchat/FlashChat/components/nar_bar.dart';
 import 'package:flashchat/FlashChat/screens/home_page.dart';
 import 'package:flashchat/Tmart/screens/home.dart';
 import 'package:flashchat/Tmart/screens/store.dart';
@@ -36,11 +37,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
           },
           selectedIndex: currentPageIndex,
           destinations: const <Widget>[
-            NavigationDestination(
-              selectedIcon: Icon(Icons.message,color: Colors.green,),
-              icon: Badge(label: Text('2'), child: Icon(Icons.message_outlined)),
-              label: 'Chats',
-            ),
+            // NavigationDestination(
+            //   selectedIcon: Icon(Icons.message,color: Colors.green,),
+            //   icon: Badge(label: Text('2'), child: Icon(Icons.message_outlined)),
+            //   label: 'Chats',
+            // ),
             NavigationDestination(
               selectedIcon: Icon(Icons.home,color: Colors.green,),
               icon: Icon(Icons.home_outlined),
@@ -54,17 +55,23 @@ class _NavigationMenuState extends State<NavigationMenu> {
             NavigationDestination(
               selectedIcon: Icon(Icons.favorite,color: Colors.green,),
               icon: Badge(child: Icon(Icons.favorite_border_outlined)),
-              label: 'Store',
+              label: 'WishList',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.person,color: Colors.green,),
+              icon: Badge(child: Icon(Icons.person_outline_sharp)),
+              label: 'Profile',
             ),
           ],
         ),
       ),
       body:
       <Widget>[
-        const HomePage(),
+        // const HomePage(),  --> this is homeScreen of chat application
         const Home(),
         const Store(),
         const Wishlist(),
+        const NavBar(),
       ][currentPageIndex],
     );
   }

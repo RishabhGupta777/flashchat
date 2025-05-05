@@ -3,7 +3,6 @@ import 'package:flashchat/Tmart/colors.dart';
 import 'package:flashchat/Tmart/firestore_service.dart';
 import 'package:flashchat/Tmart/screens/all_product.dart';
 import 'package:flashchat/Tmart/screens/cart_screen.dart';
-import 'package:flashchat/Tmart/screens/sub_Categories_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/banner_slider.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_counter_icon.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
@@ -114,7 +113,8 @@ class _HomeState extends State<Home> {
                                return TVerticalImageText(
                                  name:category['name'],
                                  imageUrl:category['pic'],
-                                 onTap:()=> Navigator.push(context, MaterialPageRoute(builder:(context)=>SubCategoriesScreen())),);
+                                 onTap:()=> Navigator.push(context, MaterialPageRoute(builder:(context)=>AllProduct(category:category['name'],))),);
+                                       ///yha par subCategory name ke file me pass karwaya tha video me
                              }
                            ),
                          ),

@@ -116,11 +116,11 @@ class _StoreState extends State<Store> {
           body:  TabBarView(
             children:[
               ///shoes category
-             TCategoryTab(category: "shoes"),
+             TCategoryTab(category: "Shoes"),
               ///Electronics category
-              TCategoryTab(category: "electronics",),
+              TCategoryTab(category: "Electronics",),
               ///Clothes category
-              TCategoryTab(category: "clothes",),
+              TCategoryTab(category: "Clothes",),
 
             ],
           ),
