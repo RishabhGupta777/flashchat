@@ -15,7 +15,7 @@ class NavigationMenu extends StatefulWidget {
 }
 
 class _NavigationMenuState extends State<NavigationMenu> {
-  int currentPageIndex = 1;
+  int currentPageIndex = 0;
 
 
   @override
@@ -59,7 +59,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.person,color: Colors.green,),
-              icon: Badge(child: Icon(Icons.person_outline_sharp)),
+              icon: Icon(Icons.person_outline_sharp),
               label: 'Profile',
             ),
           ],

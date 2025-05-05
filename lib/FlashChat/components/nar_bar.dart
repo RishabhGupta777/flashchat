@@ -4,6 +4,7 @@ import 'package:flashchat/FlashChat/components/webview_screen.dart';
 import 'package:flashchat/FlashChat/screens/my_Profile.dart';
 import 'package:flashchat/FlashChat/screens/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashchat/Tmart/screens/cart_screen.dart';
 import 'package:flashchat/Tmart/screens/orderlistsItems.dart';
 import 'package:flashchat/Tmart/screens/user_address_screen.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +50,8 @@ class _NavBarState extends State<NavBar> {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-              accountName: Text(name),
-              accountEmail:Text('$loggedInUser'),
+              accountName: Text(name,style: TextStyle(color: Colors.black),),
+              accountEmail:Text('$loggedInUser',style: TextStyle(color: Colors.black),),
               currentAccountPicture: CircleAvatar(
                   radius: 77, // Adjust the size
                 backgroundColor: Colors.white,
@@ -69,14 +70,14 @@ class _NavBarState extends State<NavBar> {
               ),
 
             decoration: const BoxDecoration(
-              color: Colors.lightBlueAccent,
+              color: Colors.white,   //yha lightBlueAccent color tha
             ),
           ),
           ListTile(
           onTap: (){ Navigator.push(context, MaterialPageRoute(
     builder: (context) =>const MyProfile(),),
     );},
-            leading: const Icon(Icons.person),
+            leading: const Icon(Icons.person_outline_sharp),
             title: const Text('My Profile'),
           ),
           ListTile(
@@ -91,15 +92,22 @@ class _NavBarState extends State<NavBar> {
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>UserAddressScreen(),));
             },
-            leading: Icon(Icons.home_work_sharp),
+            leading: Icon(Icons.home_work_outlined),
             title: Text('My Address'),
+          ),
+          ListTile(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen(),));
+            },
+            leading: Icon(Icons.shopping_cart_outlined),
+            title: Text('My Cart'),
           ),
           ListTile(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>TOrderListItems(),));
             },
-            leading: Icon(Icons.inventory_2_outlined),
-            title: Text('My Address'),
+            leading: Icon(Icons.local_shipping_outlined,),
+            title: Text('My Orders'),
           ),
           const Divider(),
           ListTile(
