@@ -38,7 +38,7 @@ class _AllBrandScreenState extends State<AllBrandScreen> {
 
                 final brands = snapshot.data!;
                 return TGridLayout(
-                  itemCount:brands.length ,
+                  itemCount:brands.length,
                   mainAxisExtent: 80,
                   itemBuilder: (_, index) {
                     final brand = brands[index];
