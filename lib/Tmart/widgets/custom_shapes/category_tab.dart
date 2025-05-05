@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/brandShowcaseList.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_showcase.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
 import 'package:flashchat/Tmart/widgets/product_card/grid_layout.dart';
@@ -6,9 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flashchat/Tmart/widgets/product_card/product_card_vertical.dart';
 
 class TCategoryTab extends StatelessWidget {
-  const TCategoryTab({
-    super.key,
-  });
+  final String category;
+  const TCategoryTab({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -16,26 +16,27 @@ class TCategoryTab extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height:65,),
-          const TBrandShowcase(images: ["assets/images/Sneaker.png","assets/images/shoe.png","assets/images/Sneaker.png"],),
+          TBrandShowcaseList(category: category), //  Dynamic Showcase
           const SizedBox(height: 4,),
           const TSectionHeading(title: 'You might like'),
           StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('Products').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+            stream: FirebaseFirestore.instance
+                .collection('Products')
+                .where('category', isEqualTo: category)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
-                final products = snapshot.data!.docs;
+              final products = snapshot.data!.docs;
 
-                return TGridLayout(
-                  itemCount: products.length,
-                  itemBuilder: (_, int index) {
-                    final product = products[index];
-                    return TProductCardVertical(
-                      document: product,
-                    );
-                  },
-                );
-              }
+              return TGridLayout(
+                itemCount: products.length,
+                itemBuilder: (_, int index) {
+                  final product = products[index];
+                  return TProductCardVertical(document: product);
+                },
+              );
+            },
           ),
           const SizedBox(height: 4,),
         ],

@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 
 class TBrandShowcase extends StatelessWidget {
+  final List<String> images;
+  final String brandName;
+  final String brandLogo;
+
   const TBrandShowcase({
     super.key,
     required this.images,
+    required this.brandName,
+    required this.brandLogo,
   });
-  final List<String>images;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,11 @@ class TBrandShowcase extends StatelessWidget {
       backgroundColor: Colors.white,
       child:Column(
         children: [
-          const TBrandCard(showBorder: false,brandName: 'Nike',brandLogo: "https://firebasestorage.googleapis.com/v0/b/jioos-3ae31.appspot.com/o/products%2FbrandPic%2Fb5.jpeg?alt=media&token=c490cb62-0407-40d1-bd52-b2214088416a",),
+          TBrandCard(
+            showBorder: false,
+            brandName: brandName,
+            brandLogo: brandLogo,
+          ),
           Row(
               children: images.map((image)=>BrandTopImagesWidget(image,context)).toList()
           )
@@ -31,10 +40,11 @@ class TBrandShowcase extends StatelessWidget {
   Expanded BrandTopImagesWidget(String image,context) {
     return Expanded(
       child: TRoundedContainer(
+        radius: 0,
         borderColor: Colors.white,
         height: 80,
         margin:10,
-        child:Image(image:AssetImage(image),fit: BoxFit.contain,),
+        child:Image.network(image, fit: BoxFit.contain),
       ),
     );
   }

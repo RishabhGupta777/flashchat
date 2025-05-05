@@ -115,9 +115,13 @@ class _StoreState extends State<Store> {
           },
           body:  TabBarView(
             children:[
-             TCategoryTab(),
-              const Center(child: Text("It's rainy here")),
-              const Center(child: Text("It's sunny here")),
+              ///shoes category
+             TCategoryTab(category: "shoes"),
+              ///Electronics category
+              TCategoryTab(category: "electronics",),
+              ///Clothes category
+              TCategoryTab(category: "clothes",),
+
             ],
           ),
         ),
