@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashchat/Tmart/screens/user_address_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_items.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/singleaddress.dart';
 import 'package:flutter/material.dart';
 
 class Checkoutscreen extends StatelessWidget {
@@ -60,50 +64,46 @@ class TBillingAddressSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final uid = FirebaseAuth.instance.currentUser?.email;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TSectionHeading(
           title: 'Shipping Address',
           buttonTitle: 'Change',
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>UserAddressScreen(),));
+          },
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Rishabh Gupta',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height:8),
-              Row(
-                children: [
-                  const Icon(Icons.phone, color: Colors.grey, size: 16),
-                  const SizedBox(width:12),
-                  Text(
-                    '+91-917809525',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-              const SizedBox(height:8),
-              Row(
-                children: [
-                  const Icon(Icons.location_history, color: Colors.grey, size: 16),
-                  const SizedBox(width:12),
-                  Expanded(
-                    child: Text(
-                      'South Liana, Maine 87695, USA',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      softWrap: true,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('addresses')
+              .doc(uid)
+              .collection('userAddresses')
+              .where('isSelected', isEqualTo: true)
+              .snapshots(),
+          builder: (context,snapshot){
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(child: Text('No addresses found.'));
+            }
+
+            // final data = snapshot.data!.docs as Map<String, dynamics>;
+            final doc = snapshot.data!.docs.first;
+            final data = doc.data() as Map<String, dynamic>;
+
+            return TSingleAddress(
+              selectedAddress:false, // mark first as selected
+              name: data['name'] ?? '',
+              phone: data['phone'] ?? '',
+              fullAddress:
+              '${data['houseName']}, ${data['area']}, ${data['city']}, ${data['state']}, ${data['pinCode']}',
+            );
+          },
         ),
       ],
     );

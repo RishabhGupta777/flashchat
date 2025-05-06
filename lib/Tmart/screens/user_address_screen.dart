@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat/Tmart/colors.dart';
 import 'package:flashchat/Tmart/screens/user_address_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/add_new_address_screen.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/singleaddress.dart';
 import 'package:flutter/material.dart';
 
@@ -15,13 +16,6 @@ class UserAddressScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Addresses', style: Theme.of(context).textTheme.headlineSmall),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: TColors.primary,
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddNewAddressScreen(),));
-        },
-        child: const Icon(Icons.add, color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -51,7 +45,7 @@ class UserAddressScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final doc = addressDocs[index];
                   final data = doc.data() as Map<String, dynamic>;
-                  final isSelected = data['isSelected'] ?? false;
+                  // final isSelected = data['isSelected'] ?? false;  //TSingleAddress me isSelected pass karke to ye line likhna parta
 
                   return GestureDetector(
                     onTap: () async {
@@ -64,7 +58,7 @@ class UserAddressScreen extends StatelessWidget {
                       await doc.reference.update({'isSelected': true});
                     },
                     child: TSingleAddress(
-                      selectedAddress:isSelected, // mark first as selected
+                      selectedAddress:data['isSelected'] ?? false,
                       name: data['name'] ?? '',
                       phone: data['phone'] ?? '',
                       fullAddress:
@@ -75,9 +69,15 @@ class UserAddressScreen extends StatelessWidget {
               );
             },
           ),
-
         ),
       ),
+      bottomNavigationBar:Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TButton(text:'Add new address',height: 52,
+            onTap:(){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>AddNewAddressScreen(),));
+            }),
+      ) ,
     );
   }
 }

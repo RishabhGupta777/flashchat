@@ -9,12 +9,14 @@ class TButton extends StatelessWidget {
   final String ? text;
   final VoidCallback onTap;
   final double radius;
+  final Color textColor ;
 
   const TButton({
     super.key,
     this.width ,
     this.height ,
     this.backgroundColor = TColors.primary,
+    this.textColor = Colors.white,
     required this.text ,
     required this.onTap,
     this.radius = 12,
@@ -32,7 +34,7 @@ class TButton extends StatelessWidget {
         child: Center(
           child: Text(
             text!,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color:textColor,fontWeight: FontWeight.w600,fontSize:18),
           ),
         ),
       ),

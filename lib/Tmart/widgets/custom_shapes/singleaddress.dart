@@ -50,19 +50,34 @@ class TSingleAddress extends StatelessWidget {
                 maxLines: 1,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 6),
-              SizedBox(
-                width: 274,
-                child: Text(
-                  fullAddress,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 4,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  softWrap: true,
-                ),
+              const SizedBox(height:8),
+              Row(
+                children: [
+                  const Icon(Icons.phone, color: Colors.grey, size: 16),
+                  const SizedBox(width:12),
+                  Text(
+                    phone,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
               ),
-              const SizedBox(height: 6),
-              Text(phone),
+              const SizedBox(height:8),
+              Row(
+                children: [
+                  const Icon(Icons.location_history, color: Colors.grey, size: 16),
+                  const SizedBox(width:12),
+                  SizedBox(
+                    width: 274,
+                    child: Text(
+                      fullAddress,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 4,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ],

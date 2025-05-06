@@ -1,8 +1,9 @@
 import 'package:flashchat/Tmart/colors.dart';
+import 'package:flashchat/Tmart/screens/cart_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
-import 'package:flashchat/Tmart/widgets/custom_shapes/circular_icon.dart';
-import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flashchat/Tmart/screens/check_out_screen.dart';
+
 
 class TBottomAddToCart extends StatelessWidget {
   const TBottomAddToCart({super.key});
@@ -11,20 +12,33 @@ class TBottomAddToCart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-     padding: EdgeInsets.symmetric(horizontal:12,vertical:4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              TCircularIcon(icon:Icons.remove,backgroundColor: Colors.grey,color: Colors.white,),
-              SizedBox(width: 6,),
-              Text('2',style: Theme.of(context).textTheme.titleMedium,),
-              SizedBox(width: 6,),
-              TCircularIcon(icon:Icons.add,backgroundColor: Colors.grey,color: Colors.white,),
-            ],
+          Expanded(
+            child: TButton(onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen()));
+            },
+              radius: 0.0,
+              width:double.infinity,
+              height:60,
+              text:'Add to cart',
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
+            ),
           ),
-          TButton(onTap: (){}, width: 120, height:40,text:'Add to cart'),
+          SizedBox(width: 10,),
+          Expanded(
+            child: TButton(
+              radius: 0.0,
+              width:double.infinity ,
+              height:60,
+              onTap:(){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Checkoutscreen()));
+            },
+              text:'Buy now',
+            ),
+          ),
         ],
       ),
     );

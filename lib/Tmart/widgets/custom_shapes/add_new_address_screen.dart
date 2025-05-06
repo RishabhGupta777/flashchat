@@ -86,13 +86,15 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
               ),
               const SizedBox(height:10),
               TextInputBox(labelText: 'Area,Colony', icon:Icon(Icons.add_road),onChanged: (val) => area = val),
-              const SizedBox(height: 20),
-              TButton(
-             onTap: saveAddressToFirebase,
-                radius: 16,text:'save',height: 53,backgroundColor:TColors.primary,),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar:Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TButton(
+          onTap: saveAddressToFirebase,
+          radius: 16,text:'save',height: 53,backgroundColor:TColors.primary,),
       ),
     );
   }

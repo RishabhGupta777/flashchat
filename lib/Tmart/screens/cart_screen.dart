@@ -1,3 +1,4 @@
+import 'package:flashchat/Tmart/screens/check_out_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_items.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,9 @@ class CartScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: TCartItems(),
       ),
-      bottomNavigationBar: TButton(onTap:(){},height:50,radius :0,text: 'CheckOut ₹999',),
+      bottomNavigationBar: TButton(onTap:(){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Checkoutscreen(),));
+      },height:50,radius :0,text: 'CheckOut ₹999',),
     );
   }
 }

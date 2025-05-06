@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flashchat/Tmart/screens/check_out_screen.dart';
 import 'package:flashchat/Tmart/screens/product_reviews.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/bottom_add_to_cart.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
@@ -43,7 +42,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
 
     return Scaffold(
-      bottomNavigationBar: TBottomAddToCart(),
+        bottomNavigationBar: SafeArea(
+          top: false, // Prevents extra space at the top
+          child: TBottomAddToCart(),
+        ),
       body:SingleChildScrollView(
         child:Column(
           children: [
@@ -72,13 +74,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                   ProductAttributes(attributes: attributes),
                   SizedBox(height: 8,),
-
-                  ///checkOut Button
-                  TButton(width:double.infinity ,height:45,onTap:(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Checkoutscreen()));
-                  },text:'CheckOut',),
-                  SizedBox(height: 8),
-
 
                   TSectionHeading(title: 'Discription' ,showActionButton: false,),
                   Padding(
