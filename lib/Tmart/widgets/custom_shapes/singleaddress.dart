@@ -6,9 +6,15 @@ class TSingleAddress extends StatelessWidget {
   const TSingleAddress({
     super.key,
     required this.selectedAddress,
-  });
+    required this.name,
+    required this.phone,
+    required this.fullAddress,
+});
 
   final bool selectedAddress;
+  final String name;
+  final String phone;
+  final String fullAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +45,24 @@ class TSingleAddress extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'John Doe',
+                name,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 6),
-              Text('+91 9113141516'),
-              const SizedBox(height: 6),
-              Text(
-                'Jimmy Coves, South Lima, Maine, 87845, USA',
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium,
-                softWrap: true,
+              SizedBox(
+                width: 274,
+                child: Text(
+                  fullAddress,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  softWrap: true,
+                ),
               ),
+              const SizedBox(height: 6),
+              Text(phone),
             ],
           ),
         ],

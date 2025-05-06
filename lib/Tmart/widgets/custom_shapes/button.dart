@@ -15,7 +15,7 @@ class TButton extends StatelessWidget {
     this.width ,
     this.height ,
     this.backgroundColor = TColors.primary,
-    this.text ,
+    required this.text ,
     required this.onTap,
     this.radius = 12,
   });
