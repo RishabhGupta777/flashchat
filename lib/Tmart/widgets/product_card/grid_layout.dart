@@ -7,10 +7,12 @@ class TGridLayout extends StatelessWidget {
     required this.itemCount,
     required this.itemBuilder,
     this.mainAxisExtent=275,  //275 tha
+    this.crossAxisCount = 2,
   });
   final int itemCount;
   final Widget? Function(BuildContext,int) itemBuilder;
   final double ? mainAxisExtent;
+  final int crossAxisCount;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class TGridLayout extends StatelessWidget {
       padding: const EdgeInsets.only(top:0.0),
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount: crossAxisCount,
         mainAxisExtent: mainAxisExtent ,  // VVI--> ye na rahe to card ke height me overflow ane lagega due to
         //for gridview a max height is fix for card and mainAxisExent increase it
       ),

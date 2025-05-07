@@ -5,8 +5,8 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/product_title_text.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 import 'package:flutter/material.dart';
 
-class ProductCardHorizonatal extends StatelessWidget {
-  const ProductCardHorizonatal({super.key});
+class TProductCardHorizontal extends StatelessWidget {
+  const TProductCardHorizontal({super.key});
 
   @override
   Widget build(BuildContext context) {

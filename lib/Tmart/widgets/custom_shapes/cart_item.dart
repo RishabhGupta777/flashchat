@@ -1,46 +1,118 @@
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashchat/Tmart/screens/product_detail.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_name.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/circular_icon.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/product_price_text.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/product_quantity_with_add_remove_button.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/product_title_text.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
+import 'package:flutter/material.dart';
 
-class TCartItem extends StatelessWidget {
-  const TCartItem({
-    super.key,
-  });
+class TCartItem extends StatefulWidget {
+  final DocumentSnapshot ? document;
+  const TCartItem({super.key, this.document,});
 
   @override
+  State<TCartItem> createState() => _TCartItemState();
+}
+
+class _TCartItemState extends State<TCartItem> {
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        /// Image
-        TRoundedContainer(
-          width: 60,
-          height:60,
-          radius:0,
-          backgroundColor: Colors.white,
-          child:Image.asset('assets/images/shoes/brown.png',fit: BoxFit.contain,),
-        ),
-        SizedBox(width:7),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TBrandName(title: 'Nike',),
-            SizedBox(width:250,child: TProductTitleText(title:'Black Sports shoes New classic no.1 for you',isLarge: false,)),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(text: 'Color ', style: Theme.of(context).textTheme.bodySmall,),
-                  TextSpan(text: 'Green ', style: Theme.of(context).textTheme.bodyLarge,),
-                  TextSpan(text: 'Size ', style: Theme.of(context).textTheme.bodySmall,),
-                  TextSpan(text: 'UK 08', style: Theme.of(context).textTheme.bodyLarge,),
-                ],
-              ),
+    final data = widget.document!.data() as Map<String, dynamic>;
+    final name = data['name'] ?? '';
+    final brand = data['brand'] ?? '';
+
+    final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
+    final variation = variations[0];
+    final imageUrl=variation['pic'];
+    final price=variation['price'];
+
+    return GestureDetector(
+      onTap: (){
+        Navigator.push( context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(
+                document : widget.document!
             ),
-          ],
-        ),
-        SizedBox(height:15),
-      ],
+          ),);
+      },
+      child: Container(
+          width: 310,
+          margin: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.black12,
+          ),
+          child:Row(
+              children: [
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TRoundedContainer(
+                          height: 100,
+                          width: 100,
+                          radius: 15,
+                          child:Image.network(imageUrl, height: 100, fit: BoxFit.cover,),),
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                          color:Colors.black,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          )
+                      ),
+                      child: SizedBox(
+                        height: 35,
+                        width: 116,
+                        child: GestureDetector(
+                          onTap:(){
+                            FirebaseFirestore.instance
+                                .collection('cartlists')
+                                .doc(FirebaseAuth.instance.currentUser?.uid)
+                                .collection('items')
+                                .doc(widget.document!.id)
+                                .delete();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.delete_outline,color: Colors.white,),
+                              SizedBox(width: 5,),
+                              Text('remove',style:TextStyle(color: Colors.white),),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left:20.0,top:8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: SizedBox(
+                            width:136,
+                            child: TProductTitleText(title:name,isLarge:false,),),
+                      ),
+                      SizedBox(height: 3,),
+                      TBrandName(title: brand,),
+                      SizedBox(height:3,),
+                      TProductPriceText(price:price,isLarge: false,),
+                      SizedBox(height:3,),
+                      TProductQuantityWithAddRemoveButton(),
+                    ],
+                  ),
+                )
+              ]
+          )
+      ),
     );
   }
 }
-

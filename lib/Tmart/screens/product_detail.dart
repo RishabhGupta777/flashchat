@@ -40,11 +40,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     ///Attributes Management
     final attributes = List<Map<String, dynamic>>.from(data['attribute'] ?? []);
 
+    ///for Add to cart
+    final selectedVariation = variations[selectedVariationIndex];
 
     return Scaffold(
         bottomNavigationBar: SafeArea(
           top: false, // Prevents extra space at the top
-          child: TBottomAddToCart(),
+          child: TAddToCartBuyNow(document:widget.document),
         ),
       body:SingleChildScrollView(
         child:Column(
