@@ -30,11 +30,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
     final images = variations.map((v) => v['pic'] as String).toList();  // for slider
     final prices = variations.map((v) => v['price'].toString()).toList();  // or 'name' if you have it
+    final realprices = variations.map((v) => v['realprice'].toString()).toList();  // or 'name' if you have it
 
     ///MetaData management
     final name = data['name'] ?? '';
     final brand = data['brand'] ?? '';
     final price = prices[selectedVariationIndex]; // get current price
+    final realprice = realprices[selectedVariationIndex];
     final brandLogo = data['brandLogo'] ?? '';
 
     ///Attributes Management
@@ -70,6 +72,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   TProductMetaData(
                     brand: brand,
                     name:name,
+                    realprice:realprice,
                     price:price,
                     brandLogo:brandLogo,
                   ),

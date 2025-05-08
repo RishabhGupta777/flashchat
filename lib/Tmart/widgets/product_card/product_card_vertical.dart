@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashchat/Tmart/discount.dart';
 import 'package:flashchat/Tmart/screens/product_detail.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/brand_name.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/circular_icon.dart';
@@ -22,6 +23,7 @@ class TProductCardVertical extends StatefulWidget {
 
 class _TProductCardVerticalState extends State<TProductCardVertical> {
   bool isWishlisted = false;
+  int discount=0;
 
   @override
   void initState() {
@@ -45,6 +47,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
 
   @override
   Widget build(BuildContext context) {
+
     final data = widget.document!.data() as Map<String, dynamic>;
     final name = data['name'] ?? '';
     final brand = data['brand'] ?? '';
@@ -53,7 +56,11 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
     final variation = variations[0];
     final imageUrl=variation['pic'];
     final price=variation['price'];
+    final realprice=variation['realprice'];
 
+    setState(() {
+      discount = calculateDiscount(realprice,price);
+    });
 
     return GestureDetector(
       onTap: (){
@@ -92,7 +99,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                           borderRadius: BorderRadius.circular(4),
                           color: Colors.yellow,
                         ),
-                        child: const Text('25%',style:TextStyle(fontWeight:FontWeight.w300))
+                        child: Text('${discount.toString()}%',style:TextStyle(fontWeight:FontWeight.w300))
                     ),
                   ),
                   Positioned(
