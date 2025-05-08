@@ -15,14 +15,14 @@ class Checkoutscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Review',style:Theme.of(context).textTheme.headlineSmall),
+        title: Text('CheckOut',style:Theme.of(context).textTheme.headlineSmall),
       ),
       body:SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
            children: [
-             TCartItems(showAddRemoveButtons: false,),
+             TCartItems(removeAndQuantity:false),
              SizedBox(height: 14,),
              TCouponCode(),
              SizedBox(height: 16,),
@@ -45,12 +45,13 @@ class Checkoutscreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8),
-        child: TButton(
-          height:50,
-          radius: 16,
-          onTap: (){},
-          text: 'Checkout ₹256.0',
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('₹999'),
+            TButton(onTap:(){},height:40,width:170,radius :8,text:'Continue',),
+          ],
         ),
       ),
     );

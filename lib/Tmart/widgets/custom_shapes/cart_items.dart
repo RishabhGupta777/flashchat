@@ -1,38 +1,51 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashchat/Tmart/widgets/product_card/grid_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flashchat/Tmart/widgets/custom_shapes/product_price_text.dart';
-import 'package:flashchat/Tmart/widgets/custom_shapes/product_quantity_with_add_remove_button.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_item.dart';
 
 class TCartItems extends StatelessWidget {
   const TCartItems({
     super.key,
-    this.showAddRemoveButtons = true,
+    this.removeAndQuantity = true,
   });
-  final bool showAddRemoveButtons;
+  final bool removeAndQuantity;
+
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      itemCount: 2,
-      separatorBuilder: (_, __) =>
-      const SizedBox(height:8),
-      itemBuilder: (_, index) => Column(
-        children: [
-          TCartItem(),
-          if(showAddRemoveButtons)
-          Row(
-            children: [
-              SizedBox(width: 65,),
-              TProductQuantityWithAddRemoveButton(),
-              SizedBox(width: 120,),
-              TProductPriceText(price: '256'),
-            ],
-          ),
-          SizedBox(height:1),
-        ],
-      ),
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('cartlists')
+            .doc(userId)
+            .collection('items')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final cartlistDocs = snapshot.data?.docs ?? [];
+
+          if (cartlistDocs.isEmpty) {
+            return const Center(child: Text('Your wishlist is empty.'));
+          }
+
+          return SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  ListView.builder(
+                      itemCount: cartlistDocs.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (_,int index)=>TCartItem(document: cartlistDocs[index],removeAndQuantity:removeAndQuantity)),
+                ],
+              )
+          );
+        }
     );
   }
 }
-

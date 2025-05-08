@@ -2,21 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/circular_icon.dart';
 
 
-class TProductQuantityWithAddRemoveButton extends StatelessWidget {
+class TProductQuantityWithAddRemoveButton extends StatefulWidget {
+  final int initialQuantity;
+  final ValueChanged<int> onQuantityChanged;
+
   const TProductQuantityWithAddRemoveButton({
     super.key,
+    this.initialQuantity = 1,
+    required this.onQuantityChanged,
   });
+
+  @override
+  State<TProductQuantityWithAddRemoveButton> createState() => _TProductQuantityWithAddRemoveButtonState();
+}
+
+class _TProductQuantityWithAddRemoveButtonState extends State<TProductQuantityWithAddRemoveButton> {
+  late int quantity;
+
+
+  @override
+  void initState() {
+    super.initState();
+    quantity = widget.initialQuantity;
+  }
+
+  void _increment() {
+    setState(() {
+      quantity++;
+    });
+    widget.onQuantityChanged(quantity);
+  }
+
+  void _decrement() {
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+      });
+      widget.onQuantityChanged(quantity);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        TCircularIcon(icon:Icons.remove,backgroundColor: Colors.grey,height:25,width:25,size:10),
-        SizedBox(width:6),
-        Text('2',style: Theme.of(context).textTheme.titleSmall,),
-        SizedBox(width:6),
-        TCircularIcon(icon:Icons.add,backgroundColor: Colors.grey,height: 25,width: 25,size:10),
-
+        TCircularIcon(icon: Icons.remove,width:35,height: 35,radius:35,size:19, onTap: _decrement),
+        SizedBox(width:8),
+        Text(quantity.toString(), style: TextStyle(fontSize: 18)),
+        SizedBox(width:8),
+        TCircularIcon(icon: Icons.add,width: 35,height: 35,radius:35,size:19 , onTap: _increment),
       ],
     );
   }

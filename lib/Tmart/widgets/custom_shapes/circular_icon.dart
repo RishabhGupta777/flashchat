@@ -11,6 +11,7 @@ class TCircularIcon extends StatelessWidget {
     this.icon,
     this.color,
     this.size,
+    this.radius=40,
   });
   final VoidCallback? onTap;
   final double width;
@@ -19,6 +20,7 @@ class TCircularIcon extends StatelessWidget {
   final IconData ? icon;
   final Color  ? color;
   final double ? size;
+  final double ? radius;
 
   @override
   Widget build(BuildContext context) {

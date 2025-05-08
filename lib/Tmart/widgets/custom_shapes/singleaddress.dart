@@ -67,7 +67,7 @@ class TSingleAddress extends StatelessWidget {
                   const Icon(Icons.location_history, color: Colors.grey, size: 16),
                   const SizedBox(width:12),
                   SizedBox(
-                    width: 274,
+                    width: 264,
                     child: Text(
                       fullAddress,
                       overflow: TextOverflow.ellipsis,

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flashchat/Tmart/screens/product_reviews.dart';
-import 'package:flashchat/Tmart/widgets/custom_shapes/bottom_add_to_cart.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/add_to_cart_buy_now.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/product_attributes.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/product_image_slider.dart';
