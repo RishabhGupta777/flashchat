@@ -9,7 +9,8 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/singleaddress.dart';
 import 'package:flutter/material.dart';
 
 class Checkoutscreen extends StatelessWidget {
-  const Checkoutscreen({super.key});
+  final double totalPrice;
+  const Checkoutscreen({super.key,this.totalPrice=0.00});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class Checkoutscreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('₹999'),
+        Text('₹${totalPrice.toStringAsFixed(2)}',style: TextStyle(fontWeight:FontWeight.w500,fontSize: 25),),
             TButton(onTap:(){},height:40,width:170,radius :8,text:'Continue',),
           ],
         ),

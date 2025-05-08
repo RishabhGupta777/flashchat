@@ -30,20 +30,23 @@ class _TCartItemState extends State<TCartItem> {
     final imageUrl=variation['pic'];
     final price=variation['price'];
 
-    return GestureDetector(
-      onTap: (){
-        Navigator.push( context,
-          MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(
-                document : widget.document!
-            ),
-          ),);
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
+    ///for total price of individual items
+    final unitPrice = double.tryParse(price.toString()) ?? 0.0;
+    final totalItemPrice = unitPrice * quantity;
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          GestureDetector(
+    onTap: (){
+    Navigator.push( context,
+    MaterialPageRoute(
+    builder: (context) => ProductDetailScreen(
+    document : widget.document!
+    ),
+    ),);},
+            child: Container(
                 width: double.infinity,
                 height:120,
                 decoration: BoxDecoration(
@@ -73,67 +76,67 @@ class _TCartItemState extends State<TCartItem> {
                             SizedBox(height: 3,),
                             TBrandName(title: brand,),
                             SizedBox(height:3,),
-                            TProductPriceText(price:price,isLarge: false,),
+                            TProductPriceText(price:totalItemPrice.toStringAsFixed(2),isLarge: false,),
                           ],
                         ),
                       )
                     ]
                 )
             ),
-           if(widget.removeAndQuantity) Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color:Colors.black12,
-                // borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: 50,
-                    width: 116,
-                    decoration: BoxDecoration(
-                      color:Colors.black12,
-                      // borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: GestureDetector(
-                      onTap:(){
-                        FirebaseFirestore.instance
-                            .collection('cartlists')
-                            .doc(FirebaseAuth.instance.currentUser?.uid)
-                            .collection('items')
-                            .doc(widget.document!.id)
-                            .delete();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.delete_outline,color: Colors.black,),
-                          SizedBox(width: 5,),
-                          Text('remove',style:TextStyle(color: Colors.black),),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: TProductQuantityWithAddRemoveButton(
-                      initialQuantity: quantity,
-                      onQuantityChanged: (newQuantity) {
-                        FirebaseFirestore.instance
-                            .collection('cartlists')
-                            .doc(FirebaseAuth.instance.currentUser?.uid)
-                            .collection('items')
-                            .doc(widget.document!.id)
-                            .update({'quantity': newQuantity});
-                      },
-                    ),
-                  ),
-                ],
-              ),
+          ),
+         if(widget.removeAndQuantity) Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color:Colors.black12,
+              // borderRadius: BorderRadius.circular(8),
             ),
-          ],
-        ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 50,
+                  width: 116,
+                  decoration: BoxDecoration(
+                    color:Colors.black12,
+                    // borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: GestureDetector(
+                    onTap:(){
+                      FirebaseFirestore.instance
+                          .collection('cartlists')
+                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .collection('items')
+                          .doc(widget.document!.id)
+                          .delete();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.delete_outline,color: Colors.black,),
+                        SizedBox(width: 5,),
+                        Text('remove',style:TextStyle(color: Colors.black),),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: TProductQuantityWithAddRemoveButton(
+                    initialQuantity: quantity,
+                    onQuantityChanged: (newQuantity) {
+                      FirebaseFirestore.instance
+                          .collection('cartlists')
+                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .collection('items')
+                          .doc(widget.document!.id)
+                          .update({'quantity': newQuantity});
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
