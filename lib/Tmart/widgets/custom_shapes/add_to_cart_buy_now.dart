@@ -10,7 +10,8 @@ import 'package:flashchat/Tmart/screens/check_out_screen.dart';
 class TAddToCartBuyNow extends StatefulWidget {
 
   final DocumentSnapshot ? document;
-  const TAddToCartBuyNow({super.key, this.document,});
+  final int selectedVariationIndex;
+  const TAddToCartBuyNow({super.key, this.document,this.selectedVariationIndex=0});
 
   @override
   State<TAddToCartBuyNow> createState() => _TAddToCartBuyNowState();
@@ -74,7 +75,7 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
         children: [
           Expanded(
             child: TButton(onTap: (){
-            isCartListed ? Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen())) : toggleCartList();  ;
+            isCartListed ? Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen())) : toggleCartList();
             },
               radius: 0.0,
               width:double.infinity,

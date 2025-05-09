@@ -8,10 +8,16 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/singleaddress.dart';
 import 'package:flutter/material.dart';
 
-class Checkoutscreen extends StatelessWidget {
+class Checkoutscreen extends StatefulWidget {
   final double totalPrice;
   const Checkoutscreen({super.key,this.totalPrice=0.00});
 
+  @override
+  State<Checkoutscreen> createState() => _CheckoutscreenState();
+}
+
+class _CheckoutscreenState extends State<Checkoutscreen> {
+  double allPrice=0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +39,12 @@ class Checkoutscreen extends StatelessWidget {
                padding: 8,
                child: Column(
                  children: [
-                   TAmountAmountSection(),
+                   TAmountAmountSection(totalPrice: widget.totalPrice,
+                     onTotalCalculated: (value) {
+                     setState(() {
+                       allPrice = value;
+                     });
+                   },),
                    const SizedBox(height:14),
                    Divider(),
                    TBillingPaymentSection(),
@@ -50,7 +61,7 @@ class Checkoutscreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-        Text('₹${totalPrice.toStringAsFixed(2)}',style: TextStyle(fontWeight:FontWeight.w500,fontSize: 25),),
+        Text('₹${allPrice.toStringAsFixed(2)}',style: TextStyle(fontWeight:FontWeight.w500,fontSize: 25),),
             TButton(onTap:(){},height:40,width:170,radius :8,text:'Continue',),
           ],
         ),
@@ -139,10 +150,35 @@ class TBillingPaymentSection extends StatelessWidget {
   }
 }
 
-class TAmountAmountSection extends StatelessWidget {
+class TAmountAmountSection extends StatefulWidget {
+  final double totalPrice;
+  final void Function(double) onTotalCalculated;
+
   const TAmountAmountSection({
     super.key,
+    required this.totalPrice,
+    required this.onTotalCalculated
   });
+
+  @override
+  State<TAmountAmountSection> createState() => _TAmountAmountSectionState();
+}
+
+class _TAmountAmountSectionState extends State<TAmountAmountSection> {
+  double shippingFee=6.0;
+  double taxFee=12.0;
+  double allPrice=0;
+
+  @override
+  void initState() {
+    super.initState();
+    allPrice = shippingFee + taxFee + widget.totalPrice;
+
+    // Delay the callback to avoid calling setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onTotalCalculated(allPrice);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +189,7 @@ class TAmountAmountSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Subtotal', style: Theme.of(context).textTheme.bodyMedium),
-            Text('₹256.0', style: Theme.of(context).textTheme.bodyMedium),
+            Text('₹${widget.totalPrice.toStringAsFixed(2)}', style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
         const SizedBox(height:8),
@@ -163,7 +199,7 @@ class TAmountAmountSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Shipping Fee', style: Theme.of(context).textTheme.bodyMedium),
-            Text('₹6.0', style: Theme.of(context).textTheme.labelLarge),
+            Text('₹${shippingFee.toStringAsFixed(2)}', style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
         const SizedBox(height: 8),
@@ -173,7 +209,7 @@ class TAmountAmountSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Tax Fee', style: Theme.of(context).textTheme.bodyMedium),
-            Text('₹6.0', style: Theme.of(context).textTheme.labelLarge),
+            Text('₹${taxFee.toStringAsFixed(2)}', style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
         const SizedBox(height:6),
@@ -182,8 +218,8 @@ class TAmountAmountSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Order Total', style: Theme.of(context).textTheme.bodyMedium),
-            Text('₹6.0', style: Theme.of(context).textTheme.titleMedium),
+            Text('Order Total', style: Theme.of(context).textTheme.titleMedium),
+            Text('${allPrice.toStringAsFixed(2)}', style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
       ],

@@ -48,7 +48,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
         bottomNavigationBar: SafeArea(
           top: false, // Prevents extra space at the top
-          child: TAddToCartBuyNow(document:widget.document),
+          child: TAddToCartBuyNow(document:widget.document,selectedVariationIndex :selectedVariationIndex ),
         ),
       body:SingleChildScrollView(
         child:Column(
