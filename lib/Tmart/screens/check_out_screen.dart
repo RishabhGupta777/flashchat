@@ -169,6 +169,7 @@ class _TAmountAmountSectionState extends State<TAmountAmountSection> {
   double taxFee=12.0;
   double allPrice=0;
 
+
   @override
   void initState() {
     super.initState();
