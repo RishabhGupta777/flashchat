@@ -18,7 +18,8 @@ class TAddToCartBuyNow extends StatefulWidget {
 }
 
 class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
-  static final _userId = FirebaseAuth.instance.currentUser?.uid;
+  static final _userId = FirebaseAuth.instance.currentUser?.email;
+
   bool isCartListed=false;
   @override
   void initState() {
@@ -27,13 +28,14 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
   }
   // Check if the item is in the cart
   Future<void> checkIfCartListed() async {
+    final variationId = '${widget.document!.id}_${widget.selectedVariationIndex}';
     if (_userId == null || widget.document == null) return; // null check for user and document
 
     final doc = await FirebaseFirestore.instance
         .collection('cartlists')
         .doc(_userId)
         .collection('items')
-        .doc(widget.document!.id)
+        .doc(variationId)
         .get();
 
     if (doc.exists) {
@@ -42,29 +44,45 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
       });
     }
 
+
   }
 
   // Toggle the item between cart and wishlist
   Future<void> toggleCartList() async {
-    if (_userId == null || widget.document == null) return; // null check for user and document
+    if (_userId == null || widget.document == null) return;
 
+    final variationId = '${widget.document!.id}_${widget.selectedVariationIndex}';
     final itemRef = FirebaseFirestore.instance
         .collection('cartlists')
         .doc(_userId)
         .collection('items')
-        .doc(widget.document!.id);
+        .doc(variationId);
 
     if (!isCartListed) {
-      await itemRef.set(widget.document!.data() as Map<String, dynamic>);
+      final data = widget.document!.data() as Map<String, dynamic>;
+      final variationData = data['variation'][widget.selectedVariationIndex];
+
+      await itemRef.set({
+        'productId': widget.document!.id,
+        'variationIndex': widget.selectedVariationIndex,
+        'category': data['category'],
+        'name': data['name'],
+        'brand':data['brand'],
+        'brandLogo':data['brandLogo'],
+        'quantity': 1,
+        'variation': variationData,
+      });
+
       setState(() {
         isCartListed = true;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Item Add to cart successfully')),
+        SnackBar(content: Text('Item added to cart successfully')),
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

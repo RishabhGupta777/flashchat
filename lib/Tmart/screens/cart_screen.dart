@@ -18,7 +18,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     double totalPrice = 0.0;
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userId = FirebaseAuth.instance.currentUser?.email;
 
     return Scaffold(
       appBar: AppBar(
@@ -48,13 +48,19 @@ class _CartScreenState extends State<CartScreen> {
                 for (var doc in cartDocs) {
                      final data = doc.data() as Map<String, dynamic>;
                      final quantity = data['quantity'] ?? 1;
-                     final variation = List<Map<String, dynamic>>.from(data['variation'] ?? []);
-                     final price = variation.isNotEmpty
-                         ? num.tryParse(variation[0]['price'].toString()) ?? 0.0
-                         : 0.0;
+                    double price = 0.0;
+                     final variation = data['variation'];
+                     if (variation is List && variation.isNotEmpty) {
+                       final firstVar = variation.first as Map<String, dynamic>;
+                       price = double.tryParse(firstVar['price'].toString()) ?? 0.0;
+                     } else if (variation is Map<String, dynamic>) {
+                       price = double.tryParse(variation['price'].toString()) ?? 0.0;
+                     }
                      totalPrice += price * quantity;
                 }
-                return Text('₹${totalPrice.toStringAsFixed(2)}',style: TextStyle(fontWeight:FontWeight.w500,fontSize: 25),);
+                return SizedBox(
+                  width: 190,
+                    child: Text('₹${totalPrice.toStringAsFixed(2)}',style: TextStyle(fontWeight:FontWeight.w500,fontSize: 25),));
           }),
             TButton(onTap:(){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>Checkoutscreen(totalPrice: totalPrice,),));

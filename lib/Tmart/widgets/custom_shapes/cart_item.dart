@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 
 class TCartItem extends StatefulWidget {
   final DocumentSnapshot ? document;
-  final int variationIndex;
+  final int ? variationIndex;
   final bool removeAndQuantity;
-  const TCartItem({super.key, this.document,required this.removeAndQuantity, this.variationIndex = 0,});
+  const TCartItem({super.key, this.document,required this.removeAndQuantity, this.variationIndex,});
 
   @override
   State<TCartItem> createState() => _TCartItemState();
@@ -25,9 +25,18 @@ class _TCartItemState extends State<TCartItem> {
     final name = data['name'] ?? '';
     final brand = data['brand'] ?? '';
     final quantity = data['quantity'] ?? 1;
+    final productId= data['productId'] ?? '';
 
-    final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
-    final variation = variations[widget.variationIndex];
+    Map<String, dynamic> variation = {};
+    if (widget.variationIndex != null) {
+      final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
+      if (widget.variationIndex! < variations.length) {
+        variation = variations[widget.variationIndex!];
+      }
+    } else {
+      variation = data['variation'] as Map<String, dynamic>? ?? {};
+    }
+
     final imageUrl=variation['pic'];
     final price=variation['price'];
 
@@ -40,13 +49,22 @@ class _TCartItemState extends State<TCartItem> {
       child: Column(
         children: [
           GestureDetector(
-    onTap: (){
-    Navigator.push( context,
-    MaterialPageRoute(
-    builder: (context) => ProductDetailScreen(
-    document : widget.document!
-    ),
-    ),);},
+                  onTap: ()async{
+          final productId = data['productId'];
+             if (productId != null && productId != '') {
+             final productDoc = await FirebaseFirestore.instance
+                                 .collection('Products')
+                                  .doc(productId)
+                                  .get();
+
+          if (productDoc.exists) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailScreen(document: productDoc),
+              ),
+            );
+          }}},
             child: Container(
                 width: double.infinity,
                 height:120,
@@ -105,7 +123,7 @@ class _TCartItemState extends State<TCartItem> {
                     onTap:(){
                       FirebaseFirestore.instance
                           .collection('cartlists')
-                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .doc(FirebaseAuth.instance.currentUser?.email)
                           .collection('items')
                           .doc(widget.document!.id)
                           .delete();
@@ -127,7 +145,7 @@ class _TCartItemState extends State<TCartItem> {
                     onQuantityChanged: (newQuantity) {
                       FirebaseFirestore.instance
                           .collection('cartlists')
-                          .doc(FirebaseAuth.instance.currentUser?.uid)
+                          .doc(FirebaseAuth.instance.currentUser?.email)
                           .collection('items')
                           .doc(widget.document!.id)
                           .update({'quantity': newQuantity});
