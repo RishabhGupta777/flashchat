@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 
 class TCartItem extends StatefulWidget {
   final DocumentSnapshot ? document;
+  final int variationIndex;
   final bool removeAndQuantity;
-  const TCartItem({super.key, this.document,required this.removeAndQuantity});
+  const TCartItem({super.key, this.document,required this.removeAndQuantity, this.variationIndex = 0,});
 
   @override
   State<TCartItem> createState() => _TCartItemState();
@@ -26,7 +27,7 @@ class _TCartItemState extends State<TCartItem> {
     final quantity = data['quantity'] ?? 1;
 
     final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
-    final variation = variations[0];
+    final variation = variations[widget.variationIndex];
     final imageUrl=variation['pic'];
     final price=variation['price'];
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat/Tmart/screens/user_address_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
+import 'package:flashchat/Tmart/widgets/custom_shapes/cart_item.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_items.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/rounded_container.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
@@ -10,7 +11,14 @@ import 'package:flutter/material.dart';
 
 class Checkoutscreen extends StatefulWidget {
   final double totalPrice;
-  const Checkoutscreen({super.key,this.totalPrice=0.00});
+  final DocumentSnapshot? singleProduct;
+  final int selectedVariationIndex;
+  const Checkoutscreen({
+    super.key,
+    this.totalPrice=0.00,
+    this.singleProduct,
+    this.selectedVariationIndex = 0,
+  });
 
   @override
   State<Checkoutscreen> createState() => _CheckoutscreenState();
@@ -29,7 +37,13 @@ class _CheckoutscreenState extends State<Checkoutscreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
            children: [
-             TCartItems(removeAndQuantity:false),
+             widget.singleProduct != null
+                 ?  TCartItem(
+               removeAndQuantity: false,
+               document: widget.singleProduct!,
+               variationIndex: widget.selectedVariationIndex,
+             )
+                 : TCartItems(removeAndQuantity: false),
              SizedBox(height: 14,),
              TCouponCode(),
              SizedBox(height: 16,),

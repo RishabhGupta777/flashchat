@@ -92,7 +92,15 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
               width:double.infinity ,
               height:60,
               onTap:(){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Checkoutscreen()));
+                final data = widget.document!.data() as Map<String, dynamic>;
+                final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
+                final selectedPrice = variations[widget.selectedVariationIndex]['price'];
+                final totalPrice = double.tryParse(selectedPrice.toString()) ?? 0.0;
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Checkoutscreen(
+                totalPrice: totalPrice,
+                singleProduct: widget.document,
+                selectedVariationIndex: widget.selectedVariationIndex,
+              )));
             },
               text:'Buy now',
             ),

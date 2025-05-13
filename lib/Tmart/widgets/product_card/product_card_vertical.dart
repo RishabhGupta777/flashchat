@@ -122,31 +122,11 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                   TProductTitleText(title:name,isLarge:false,),
                   SizedBox(height: 5,),
                   TBrandName(title: brand,),
+                  SizedBox(height: 5,),
+                  TProductPriceText(price:price,isLarge: false,),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left:14),
-                  child: TProductPriceText(price:price,isLarge: false,),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                      color:Colors.black,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
-                      )
-                  ),
-                  child: const SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Icon(Icons.add,color: Colors.white,)),
-                ),
-              ],
-            )
           ],
         ),
       ),
