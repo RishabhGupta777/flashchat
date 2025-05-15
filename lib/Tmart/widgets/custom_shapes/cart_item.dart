@@ -26,6 +26,8 @@ class _TCartItemState extends State<TCartItem> {
     final name = data['name'] ?? '';
     final brand = data['brand'] ?? '';
     final quantity = data['quantity'] ?? 1;
+    final attributeName=data['attributeName'] ?? '';
+    final attValue = data['attValue'] ?? '';
 
 
     Map<String, dynamic> variation = {};
@@ -95,7 +97,9 @@ class _TCartItemState extends State<TCartItem> {
                             ),
                             SizedBox(height: 3,),
                             TBrandName(title: brand,),
-                            SizedBox(height:3,),
+                            SizedBox(height: 3,),
+                            if(attributeName!='')Text('$attributeName : $attValue',style: TextStyle(color: Colors.black54),),
+                            if(attributeName!='')SizedBox(height:3,),
                             TProductPriceText(price:totalItemPrice.toStringAsFixed(2),isLarge: false,),
                           ],
                         ),

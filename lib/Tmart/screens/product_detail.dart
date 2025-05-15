@@ -23,6 +23,7 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int selectedVariationIndex=0;
+  String attributeValue=" ";
 
   @override
   void initState() {
@@ -58,7 +59,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
         bottomNavigationBar: SafeArea(
           top: false, // Prevents extra space at the top
-          child: TAddToCartBuyNow(document:widget.document,selectedVariationIndex :selectedVariationIndex ),
+          child: TAddToCartBuyNow(
+              document:widget.document,
+              selectedVariationIndex :selectedVariationIndex,
+            attValue:attributeValue
+          ),
         ),
       body:SingleChildScrollView(
         child:Column(
@@ -87,7 +92,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     brandLogo:brandLogo,
                   ),
 
-                  ProductAttributes(attributes: attributes),
+                  ProductAttributes(
+                      attributes: attributes,
+                      onAttributeSelected: (attValue){
+                        setState(() {
+                          attributeValue = attValue;
+                        });
+                      },
+                  ),
                   SizedBox(height: 8,),
 
                   TSectionHeading(title: 'Discription' ,showActionButton: false,),

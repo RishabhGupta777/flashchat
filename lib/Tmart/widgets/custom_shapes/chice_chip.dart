@@ -7,17 +7,19 @@ class TChoiceChip extends StatefulWidget {
     this.isCircular=false,
     this.texts, // Pass texts when using text chips
     this.colors, // Accept colors from parent
+    required this.onAttributeSelected,
   });
   final bool isCircular;
   final List<String>? texts; // List of text options
   final List<Color> ? colors; // List of colors for chips
+  final Function(String attValue) onAttributeSelected;
 
   @override
   State<TChoiceChip> createState() => _TChoiceChipState();
 }
 
 class _TChoiceChipState extends State<TChoiceChip> {
-  int? _value = 1;
+  int? _value;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class _TChoiceChipState extends State<TChoiceChip> {
             setState(() {
               _value = selected ? index : null;
             });
+            widget.onAttributeSelected(widget.texts![_value!]);
           },
         );
       }).toList(),

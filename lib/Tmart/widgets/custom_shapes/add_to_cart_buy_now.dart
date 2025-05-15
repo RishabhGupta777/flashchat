@@ -11,7 +11,13 @@ class TAddToCartBuyNow extends StatefulWidget {
 
   final DocumentSnapshot ? document;
   final int selectedVariationIndex;
-  const TAddToCartBuyNow({super.key, this.document,this.selectedVariationIndex=0});
+  final String attValue;
+  const TAddToCartBuyNow({
+    super.key,
+    this.document,
+    this.selectedVariationIndex=0,
+    required this.attValue
+  });
 
   @override
   State<TAddToCartBuyNow> createState() => _TAddToCartBuyNowState();
@@ -19,6 +25,8 @@ class TAddToCartBuyNow extends StatefulWidget {
 
 class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
   static final _userId = FirebaseAuth.instance.currentUser?.email;
+  String attributeName = " ";
+
 
   bool isCartListed=false;
   @override
@@ -58,7 +66,7 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
         .collection('items')
         .doc(variationId);
 
-    if (!isCartListed) {
+    if (!isCartListed && widget.attValue!=" ") {
       final data = widget.document!.data() as Map<String, dynamic>;
       final variationData = data['variation'][widget.selectedVariationIndex];
 
@@ -71,6 +79,8 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
         'brandLogo':data['brandLogo'],
         'quantity': 1,
         'variation': variationData,
+        'attValue':widget.attValue,
+        'attributeName':attributeName,
       });
 
       setState(() {
@@ -80,12 +90,20 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Item added to cart successfully')),
       );
+    } else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please choose the $attributeName')),);
     }
   }
 
 
   @override
   Widget build(BuildContext context) {
+    final data = widget.document!.data() as Map<String, dynamic>;
+    final attributes = List<Map<String, dynamic>>.from(data['attribute'] ?? []);
+    final Map<String, dynamic> attribute = attributes[0];
+    attributeName=attribute['name'] ?? " ";
+
     return Container(
       height: 60,
       child: Row(

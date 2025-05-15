@@ -4,9 +4,11 @@ import 'package:flashchat/Tmart/widgets/custom_shapes/chice_chip.dart';
 class ProductAttributes extends StatelessWidget {
   const ProductAttributes({
     super.key,
-   required this.attributes,
+    required this.attributes,
+    required this.onAttributeSelected,
   });
   final List<Map<String, dynamic>> attributes;
+  final Function(String attValue) onAttributeSelected;
 
 
   @override
@@ -32,6 +34,9 @@ class ProductAttributes extends StatelessWidget {
         Text(name, style:Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 3),
         TChoiceChip(
+          onAttributeSelected: (attValue){
+            onAttributeSelected(attValue);
+          },
           isCircular: false,
           texts:sizeStrings, // Pass text options
         ),
