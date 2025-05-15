@@ -14,14 +14,26 @@ import 'package:flutter/material.dart';
 class ProductDetailScreen extends StatefulWidget {
 
   final DocumentSnapshot  document;
-  const ProductDetailScreen({super.key,required this.document});
+  final int selectedVariationIndex;
+  const ProductDetailScreen({super.key,required this.document,this.selectedVariationIndex=0});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  int selectedVariationIndex = 0;
+  int selectedVariationIndex=0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ///For changing the selected image when data comes from Add to cart
+    setState(() {
+      selectedVariationIndex = widget.selectedVariationIndex;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = widget.document.data() as Map<String, dynamic>;
@@ -42,8 +54,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     ///Attributes Management
     final attributes = List<Map<String, dynamic>>.from(data['attribute'] ?? []);
 
-    ///for Add to cart
-    final selectedVariation = variations[selectedVariationIndex];
 
     return Scaffold(
         bottomNavigationBar: SafeArea(
@@ -60,7 +70,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                      selectedVariationIndex = index;
                    });
                },
-              images: images,document:widget.document,),
+              images: images,document:widget.document,selectedVariationIndex:selectedVariationIndex),
 
             ///Rating and Share button
             Padding(

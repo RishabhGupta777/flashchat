@@ -22,10 +22,11 @@ class _TCartItemState extends State<TCartItem> {
   @override
   Widget build(BuildContext context) {
     final data = widget.document!.data() as Map<String, dynamic>;
+    final selectedVariationIndex = data['variationIndex'];
     final name = data['name'] ?? '';
     final brand = data['brand'] ?? '';
     final quantity = data['quantity'] ?? 1;
-    final productId= data['productId'] ?? '';
+
 
     Map<String, dynamic> variation = {};
     if (widget.variationIndex != null) {
@@ -61,7 +62,7 @@ class _TCartItemState extends State<TCartItem> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductDetailScreen(document: productDoc),
+                builder: (context) => ProductDetailScreen(document: productDoc,selectedVariationIndex:selectedVariationIndex,),
               ),
             );
           }}},

@@ -14,7 +14,9 @@ class TProductImageSlider extends StatefulWidget {
    required this.images,
     this.document,
     required this.onImageChange,
+    this.selectedVariationIndex=0,
   });
+  final int selectedVariationIndex;
   final List images;
   final DocumentSnapshot ? document;
   final Function(int index) onImageChange;
@@ -35,6 +37,10 @@ class _TProductImageSliderState extends State<TProductImageSlider> {
       setState(() {
         isWishlisted = exists;
       });
+    });
+    ///For changing the selected image when data comes from Add to cart
+    setState(() {
+      selectedImageIndex=widget.selectedVariationIndex;
     });
   }
 
