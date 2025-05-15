@@ -13,11 +13,16 @@ class Checkoutscreen extends StatefulWidget {
   final double totalPrice;
   final DocumentSnapshot? singleProduct;
   final int selectedVariationIndex;
+  final String attValue;
+  final String attributeName;
+
   const Checkoutscreen({
     super.key,
     this.totalPrice=0.00,
     this.singleProduct,
     this.selectedVariationIndex = 0,
+    this.attValue='',
+    this.attributeName='',
   });
 
   @override
@@ -42,6 +47,9 @@ class _CheckoutscreenState extends State<Checkoutscreen> {
                removeAndQuantity: false,
                document: widget.singleProduct!,
                variationIndex: widget.selectedVariationIndex,
+               attributeName:widget.attributeName,
+               attValue:widget.attValue,
+               isSingleProduct:true,
              )
                  : TCartItems(removeAndQuantity: false),
              SizedBox(height: 14,),

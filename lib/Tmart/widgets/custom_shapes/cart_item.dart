@@ -12,7 +12,18 @@ class TCartItem extends StatefulWidget {
   final DocumentSnapshot ? document;
   final int ? variationIndex;
   final bool removeAndQuantity;
-  const TCartItem({super.key, this.document,required this.removeAndQuantity, this.variationIndex,});
+  final String attValue;
+  final String attributeName;
+  final bool isSingleProduct;
+  const TCartItem({
+    super.key,
+    this.document,
+    required this.removeAndQuantity,
+    this.variationIndex,
+    this.attValue='',
+    this.attributeName='',
+    this.isSingleProduct=false,
+  });
 
   @override
   State<TCartItem> createState() => _TCartItemState();
@@ -99,6 +110,7 @@ class _TCartItemState extends State<TCartItem> {
                             TBrandName(title: brand,),
                             SizedBox(height: 3,),
                             if(attributeName!='')Text('$attributeName : $attValue',style: TextStyle(color: Colors.black54),),
+                            if(widget.isSingleProduct==true)Text('${widget.attributeName} : ${widget.attValue}',style: TextStyle(color: Colors.black54),) ,
                             if(attributeName!='')SizedBox(height:3,),
                             TProductPriceText(price:totalItemPrice.toStringAsFixed(2),isLarge: false,),
                           ],

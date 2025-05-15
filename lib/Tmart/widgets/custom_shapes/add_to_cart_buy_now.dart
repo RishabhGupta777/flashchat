@@ -132,11 +132,17 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
                 final variations = List<Map<String, dynamic>>.from(data['variation'] ?? []);
                 final selectedPrice = variations[widget.selectedVariationIndex]['price'];
                 final totalPrice = double.tryParse(selectedPrice.toString()) ?? 0.0;
+                if(widget.attValue!=" "){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>Checkoutscreen(
                 totalPrice: totalPrice,
                 singleProduct: widget.document,
                 selectedVariationIndex: widget.selectedVariationIndex,
-              )));
+                attributeName:attributeName,
+                attValue:widget.attValue,
+              )));} else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please choose the $attributeName')),);
+                }
             },
               text:'Buy now',
             ),
