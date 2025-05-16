@@ -3,6 +3,7 @@ import 'package:flashchat/Tmart/colors.dart';
 import 'package:flashchat/Tmart/help.dart';
 import 'package:flashchat/Tmart/screens/all_brand_screen.dart';
 import 'package:flashchat/Tmart/screens/brand_products.dart';
+import 'package:flashchat/Tmart/screens/cart_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_counter_icon.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/category_tab.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/section_heading.dart';
@@ -27,10 +28,15 @@ class _StoreState extends State<Store> {
       child: Scaffold(
         appBar:AppBar(
           title: const Text('Store',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: TColors.primary),),
-          actions: const [
+          actions: [
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: TCartCounterIcon(iconColor: TColors.primary,),
+              child: TCartCounterIcon(
+                iconColor: TColors.primary,
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder:(context)=>CartScreen()));
+                },
+              ),
             ),
           ],
         ),

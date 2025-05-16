@@ -29,22 +29,14 @@ class TCartItems extends StatelessWidget {
           final cartlistDocs = snapshot.data?.docs ?? [];
 
           if (cartlistDocs.isEmpty) {
-            return const Center(child: Text('Your wishlist is empty.'));
+            return const Center(child: Text('Your Cart is empty.'));
           }
 
-          return SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  ListView.builder(
-                      itemCount: cartlistDocs.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (_,int index)=>TCartItem(document: cartlistDocs[index],removeAndQuantity:removeAndQuantity)),
-                ],
-              )
-          );
+          return ListView.builder(
+              itemCount: cartlistDocs.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (_,int index)=>TCartItem(document: cartlistDocs[index],removeAndQuantity:removeAndQuantity));
         }
     );
   }
