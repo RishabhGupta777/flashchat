@@ -84,7 +84,82 @@ class _CheckoutscreenState extends State<Checkoutscreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
         Text('₹${allPrice.toStringAsFixed(2)}',style: TextStyle(fontWeight:FontWeight.w500,fontSize: 25),),
-            TButton(onTap:(){},height:40,width:170,radius :8,text:'Continue',),
+            TButton(
+              onTap: () async {
+                final userId = FirebaseAuth.instance.currentUser?.email;
+                if (userId == null) return;
+
+                final orderRef = FirebaseFirestore.instance
+                    .collection('orderlist')
+                    .doc(userId)
+                    .collection('items')
+                    .doc();
+
+                if (widget.singleProduct != null) {
+                  // SINGLE ITEM ORDER
+                  final data = widget.singleProduct!.data() as Map<String, dynamic>;
+                  final variationData = data['variation'][widget.selectedVariationIndex];
+
+                  await orderRef.set({
+                    'productId': widget.singleProduct!.id,
+                    'variationIndex': widget.selectedVariationIndex,
+                    'category': data['category'],
+                    'name': data['name'],
+                    'brand': data['brand'],
+                    'quantity': 1,
+                    'variation': variationData,
+                    'attValue': widget.attValue,
+                    'attributeName': widget.attributeName,
+                    'orderDate': Timestamp.now(),
+                    'totalPrice': allPrice,
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Order placed for single item!')),
+                  );
+
+                } else {
+                  // CART ORDER
+                  final cartItemsRef = FirebaseFirestore.instance
+                      .collection('cartlists')
+                      .doc(userId)
+                      .collection('items');
+
+                  final cartItemsSnapshot = await cartItemsRef.get();
+
+                  for (final doc in cartItemsSnapshot.docs) {
+                    final item = doc.data();
+
+                    await FirebaseFirestore.instance
+                        .collection('orderlist')
+                        .doc(userId)
+                        .collection('items')
+                        .add({
+                      ...item,
+                      'orderDate': Timestamp.now(),
+                      'totalPrice': allPrice, // Optional: individual item price preferred
+                    });
+                  }
+
+                  // Optionally clear the cart after placing order
+                  for (final doc in cartItemsSnapshot.docs) {
+                    await doc.reference.delete();
+                  }
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Order placed for all cart items!')),
+                  );
+                }
+
+                // Navigate to order confirmation or home
+                Navigator.pop(context);
+              },
+              height: 40,
+              width: 170,
+              radius: 8,
+              text: 'Continue',
+            ),
+
           ],
         ),
       ),

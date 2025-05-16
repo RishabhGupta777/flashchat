@@ -76,7 +76,6 @@ class _TAddToCartBuyNowState extends State<TAddToCartBuyNow> {
         'category': data['category'],
         'name': data['name'],
         'brand':data['brand'],
-        'brandLogo':data['brandLogo'],
         'quantity': 1,
         'variation': variationData,
         'attValue':widget.attValue,
