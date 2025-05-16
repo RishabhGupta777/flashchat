@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashchat/Tmart/screens/order_placed_screen.dart';
 import 'package:flashchat/Tmart/screens/user_address_screen.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/button.dart';
 import 'package:flashchat/Tmart/widgets/custom_shapes/cart_item.dart';
@@ -112,11 +113,9 @@ class _CheckoutscreenState extends State<Checkoutscreen> {
                     'attributeName': widget.attributeName,
                     'orderDate': Timestamp.now(),
                     'totalPrice': allPrice,
+                    'status': "Processing",
                   });
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Order placed for single item!')),
-                  );
 
                 } else {
                   // CART ORDER
@@ -138,6 +137,7 @@ class _CheckoutscreenState extends State<Checkoutscreen> {
                       ...item,
                       'orderDate': Timestamp.now(),
                       'totalPrice': allPrice, // Optional: individual item price preferred
+                      'status': "Processing",
                     });
                   }
 
@@ -146,13 +146,13 @@ class _CheckoutscreenState extends State<Checkoutscreen> {
                     await doc.reference.delete();
                   }
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Order placed for all cart items!')),
-                  );
                 }
 
-                // Navigate to order confirmation or home
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const OrderPlacedScreen()),
+                );
+
               },
               height: 40,
               width: 170,
